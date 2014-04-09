@@ -1,0 +1,117 @@
+package com.twitter.jdbc.main;
+
+import java.io.IOException;
+import java.sql.SQLException;
+
+import com.twitter.jdbc.dao.UserDAO;
+import com.twitter.jdbc.dao.TweetDAO;
+import com.twitter.jdbc.dao.FriendshipDAO;
+import com.twitter.jdbc.to.Tweet;
+import com.twitter.jdbc.to.User;
+import com.twitter.jdbc.to.Friendship;
+
+import java.util.List;
+ 
+public class Test {
+    public static void main(String[] args) {
+        getUsers();
+        getTweets();
+        getFriendships();
+        try {
+			//addUser();
+        	addTweet();
+		} catch (IOException e) {
+			System.out.println("No se ha realizado el INSERT");
+			e.printStackTrace();
+		}
+    }
+ 
+    private static void getUsers() {
+        UserDAO userDao = new UserDAO();
+        List<User> users;
+        try {
+        	System.out.println("-- users table --");
+            users = userDao.getUsers();
+            for (User user : users) {
+                //displayUser(user);
+                System.out.println(user);
+            }
+            System.out.println();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /*private static void displayUser(User user) {
+        System.out.println("User ID:" + user.getUserId());
+        System.out.println("User Name:" + user.getUserName());
+        System.out.println("Last Tweet ID:" + user.getLastTweetId());
+        System.out.println();
+    }*/
+    
+    private static void getTweets() {
+        TweetDAO tweetDao = new TweetDAO();
+        List<Tweet> tweets;
+        try {
+        	System.out.println("-- tweets table --");
+            tweets = tweetDao.getTweets();
+            for (Tweet tweet : tweets) {
+            	//displayTweet(tweet);
+                System.out.println(tweet);
+            }
+            System.out.println();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /*private static void displayTweet(Tweet tweet) {
+        System.out.println("Tweet ID:" + tweet.getTweetId());
+        System.out.println("Tweet Sender ID:" + tweet.getTweetSenderId());
+        System.out.println("Tweet:" + tweet.getTweetText());
+        System.out.println("Date:" + tweet.getDot());
+        System.out.println();
+    }*/
+    
+    private static void getFriendships() {
+        FriendshipDAO friendshipDao = new FriendshipDAO();
+        List<Friendship> friendships;
+        try {
+        	System.out.println("-- friendhip table --");
+            friendships = friendshipDao.getFriendships();
+            for (Friendship friendship : friendships) {
+            	//displayFriendship(friendship);
+                System.out.println(friendship);
+            }
+            System.out.println();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /*private static void displayFriendship(Friendship friendship) {
+        System.out.println("User request ID:" + friendship.getReqUserId());
+        System.out.println("User accept ID:" + friendship.getAccUserId());
+        System.out.println("Date:" + friendship.getDof());
+        System.out.println();
+    }*/
+    
+    @SuppressWarnings("unused")
+	private static void addUser() throws IOException {
+        UserDAO userDao = new UserDAO();     
+        try {
+        		userDao.insertUser();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static void addTweet() throws IOException {
+           TweetDAO tweetDao = new TweetDAO();     
+           try {
+           		tweetDao.insertTweet();
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+       }
+}
