@@ -25,9 +25,26 @@ public class Test {
         switch(dob)
         {
         case 1:
-        	getUsers();
-            getTweets();
-            getFriendships();
+        	
+        	System.out.println("*********************");
+        	System.out.println("* 1- SHOW USERS     *");
+        	System.out.println("* 2- SHOW TWEETS    *");
+        	System.out.println("* 3- SHOW FRIENDS   *");
+        	System.out.println("*********************");
+        	Scanner keyboard3 = new Scanner(System.in);
+            int dob3 = keyboard3.nextInt();
+            switch(dob3)
+            {
+            case 1:
+            	getUsers();
+                break;
+            case 2:
+            	 getTweets();
+            	break;
+            case 3:
+            	getFriendships();
+            	break; 
+            }
             break;
         case 2:
         	System.out.println("*********************");
@@ -59,6 +76,7 @@ public class Test {
         		}
             	break; 
             }
+            break;
         } 
     }
  
@@ -132,7 +150,6 @@ public class Test {
         System.out.println();
     }*/
     
-    @SuppressWarnings("unused")
 	private static void addUser() throws IOException {
         UserDAO userDao = new UserDAO();     
         try {
