@@ -11,19 +11,55 @@ import com.twitter.jdbc.to.User;
 import com.twitter.jdbc.to.Friendship;
 
 import java.util.List;
+import java.util.Scanner;
  
 public class Test {
     public static void main(String[] args) {
-        getUsers();
-        getTweets();
-        getFriendships();
-        try {
-			//addUser();
-        	addTweet();
-		} catch (IOException e) {
-			System.out.println("No se ha realizado el INSERT");
-			e.printStackTrace();
-		}
+    	System.out.println("*********************");
+    	System.out.println("* 1- SHOW table     *");
+    	System.out.println("* 2- INSERT         *");
+    	System.out.println("*********************");
+    	
+    	Scanner keyboard = new Scanner(System.in);
+        int dob = keyboard.nextInt();
+        switch(dob)
+        {
+        case 1:
+        	getUsers();
+            getTweets();
+            getFriendships();
+            break;
+        case 2:
+        	System.out.println("*********************");
+        	System.out.println("* 1- INSERT TWEET   *");
+        	System.out.println("* 2- INSERT USER    *");
+        	System.out.println("*********************");
+        	Scanner keyboard2 = new Scanner(System.in);
+            int dob2 = keyboard2.nextInt();
+            switch(dob2)
+            {
+            case 1:
+            	try {
+                	addTweet();
+                	keyboard2.close();
+                    keyboard.close();
+        		} catch (IOException e) {
+        			System.out.println("No se ha realizado el INSERT");
+        			e.printStackTrace();
+        		}
+                break;
+            case 2:
+            	try {
+        			addUser();
+                	keyboard2.close();
+                    keyboard.close();
+        		} catch (IOException e) {
+        			System.out.println("No se ha realizado el INSERT");
+        			e.printStackTrace();
+        		}
+            	break; 
+            }
+        } 
     }
  
     private static void getUsers() {
