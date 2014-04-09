@@ -47,6 +47,40 @@ public class TweetDAO {
         return list;
     }
     
+    public List<Tweet> getUserTweets(int userid) throws SQLException {
+        List<Tweet> list = new ArrayList<Tweet>();
+        Tweet tweet = null;
+        ResultSet rs = null, rs1 = null;
+        try {
+            connection = TwitterConnection.getConnection();
+            statement = connection.createStatement();
+            String query = "SELECT * FROM tweets WHERE id_user_sen="+userid;
+            rs1 = statement.executeQuery(query);
+            boolean val = rs1.next();
+          	if (val == false)
+           		System.out.print("El usuario no ha twiteado");
+          	else{
+                rs = statement.executeQuery(query);
+	            while (rs.next()) {
+	                tweet = new Tweet();
+	                /*Retrieve one tweet details
+	                and store it in tweet object*/
+	                tweet.setTweetId(rs.getInt("id_tweet"));
+	                tweet.setTweetSenderId(rs.getInt("id_user_sen"));
+	                tweet.setTweetText(rs.getString("tweet"));
+	                tweet.setDot(rs.getDate("date"));
+	                //add each tweet to the list
+	                list.add(tweet);
+	            }
+          	}
+        } finally {
+            DbUtil.close(rs);
+            DbUtil.close(statement);
+            DbUtil.close(connection);
+        }
+        return list;
+    }
+    
     public void insertTweet() throws SQLException, IOException {
     	Scanner scn = new Scanner(System.in);
     	String userid = null, tweet = null;

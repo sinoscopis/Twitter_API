@@ -39,7 +39,21 @@ public class Test {
             	getUsers();
                 break;
             case 2:
-            	 getTweets();
+            	System.out.println("*********************");
+            	System.out.println("* 1- SHOW 1 USER    *");
+            	System.out.println("* 2- SHOW ALL       *");
+            	System.out.println("*********************");
+            	Scanner keyboard4 = new Scanner(System.in);
+                int dob4 = keyboard4.nextInt();
+                switch(dob4)
+                {
+                case 1:
+                	getUsrTweets();
+                    break;
+                case 2:
+                	 getTweets();
+                	break;
+                }
             	break;
             case 3:
             	getFriendships();
@@ -117,6 +131,26 @@ public class Test {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    private static void getUsrTweets() {
+        TweetDAO tweetDao = new TweetDAO();
+        System.out.println("Introduzca el id del usuario del que quiera listar sus tweets: ");
+        List<Tweet> tweets;
+        Scanner keyboard5 = new Scanner(System.in);
+        int user_id = keyboard5.nextInt();
+        try {
+        	System.out.println("-- tweets table for user id: " + user_id + "--");
+            tweets = tweetDao.getUserTweets(user_id);
+            for (Tweet tweet : tweets) {
+            	//displayTweet(tweet);
+                System.out.println(tweet);
+            }
+            System.out.println();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        keyboard5.close();
     }
     
     /*private static void displayTweet(Tweet tweet) {
