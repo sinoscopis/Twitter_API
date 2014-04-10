@@ -3,12 +3,9 @@ package com.twitter.jdbc.main;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import com.twitter.jdbc.dao.UserDAO;
-import com.twitter.jdbc.dao.TweetDAO;
-import com.twitter.jdbc.dao.FriendshipDAO;
-import com.twitter.jdbc.to.Tweet;
-import com.twitter.jdbc.to.User;
-import com.twitter.jdbc.to.Friendship;
+import com.twitter.jdbc.dao.*;
+import com.twitter.jdbc.to.*;
+//import com.twitter.jdbc.server.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -202,3 +199,16 @@ public class Test {
            }
        }
 }
+
+
+
+/*MultiThreadedServer server = new MultiThreadedServer(9000);
+new Thread(server).start();
+
+try {
+    Thread.sleep(20 * 1000);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+System.out.println("Stopping Server");
+server.stop();*/
