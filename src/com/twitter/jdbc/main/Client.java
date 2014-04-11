@@ -34,6 +34,9 @@ public class Client {
  
 			//Read from socket and write back the response to server. 
 			while ((fromServer = in.readLine()) != null) {
+				System.out.println("show,table");
+				System.out.println("show,id");
+				System.out.println("insert,username");
 				System.out.println("Server - " + fromServer);
 				if (fromServer.equals("exit"))
 					break;

@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import com.twitter.jdbc.dao.*;
 import com.twitter.jdbc.to.*;
-//import com.twitter.jdbc.server.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -197,7 +196,7 @@ public class Test {
            } catch (SQLException e) {
                e.printStackTrace();
            }
-       }
+    }
 }
 
 

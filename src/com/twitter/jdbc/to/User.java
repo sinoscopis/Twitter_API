@@ -24,6 +24,6 @@ public class User {
         this.userName = userName;
     }
     public String toString() {
-    	return "User [id_user=" + userId + ", name_user=" + userName + ", id_last_tweet=" + lastTweetId + "]";
+    	return " [" + userId + "," + userName + "," + lastTweetId + "]";
     }
 }
