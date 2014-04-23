@@ -33,6 +33,6 @@ public class Tweet {
         this.dot = dot;
     }
     public String toString() {
-    	return "Tweet [id_tweet=" + tweetId + ", id_user_sen=" + tweetsenderId + ", date=" + dot + ", tweet=" + tweetText + "]";
+    	return "[" + tweetId + "," + tweetsenderId + "," + dot + "," + tweetText + "]";
     }
 }

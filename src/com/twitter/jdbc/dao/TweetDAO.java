@@ -112,4 +112,28 @@ public class TweetDAO {
             DbUtil.close(connection);
         }
     }
+    public String insertTweet(int userid, String tweet) throws SQLException, IOException {
+    	ResultSet rs = null;
+        try {
+            connection = TwitterConnection.getConnection();
+	        statement = connection.createStatement();
+	        String check = "SELECT users.id_user FROM users WHERE users.id_user ="+ userid;
+          	rs = statement.executeQuery(check);
+          	boolean val = rs.next();
+          	if (val == false)
+           		return "Imposible insertar, No existe tal usuario";
+           	else{
+                if (tweet.length() <= 140){
+	            	String query = "INSERT INTO Twitter.tweets (id_tweet, id_user_sen, date, tweet) VALUES (NULL, "+ userid +", NULL, '"+ tweet +"');";	            
+	            	statement.executeUpdate(query);
+	            	return "Tweet insertado correctamente";
+                }
+                else
+                	return "Imposible insertar, el tweet es mayor de 140 caracteres";
+           	}
+        } finally {
+            DbUtil.close(statement);
+            DbUtil.close(connection);
+        }
+    }
 }

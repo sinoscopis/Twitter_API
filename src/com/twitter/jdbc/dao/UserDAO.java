@@ -63,4 +63,16 @@ public class UserDAO {
             DbUtil.close(connection);
         }
     }
+    
+    public void insertUser(String new_user) throws SQLException, IOException {
+        try {
+            String query = "INSERT INTO Twitter.users (id_user, name_user, id_last_tweet) VALUES (NULL, '"+ new_user +"', NULL);";
+            connection = TwitterConnection.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+        } finally {
+            DbUtil.close(statement);
+            DbUtil.close(connection);
+        }
+    }
 }
