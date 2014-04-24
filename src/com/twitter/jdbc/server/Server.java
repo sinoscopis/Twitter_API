@@ -138,6 +138,10 @@ public class Server extends Thread
 					peticion = clientRequest.split(",", 3);
 					reply = addTweetServer(Integer.parseInt(peticion[1]),peticion[2]);
 				}
+				else if(clientRequest != null && clientRequest.startsWith("friendstweets,")) {
+					peticion = clientRequest.split(",", 2);
+					reply = getTweetsServer(Integer.parseInt(peticion[1]));
+				}
 				else {
 					reply = "......";
 				}
@@ -201,6 +205,22 @@ public class Server extends Thread
         String res = "";
         try {
             tweets = tweetDao.getUserTweets(user_id);
+            for (Tweet tweet : tweets) {
+            	res = res + tweet;
+            }
+            System.out.println();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+	
+	private static String getTweetsServer(int user_id) {
+        TweetDAO tweetDao = new TweetDAO();
+        List<Tweet> tweets;
+        String res = "";
+        try {
+            tweets = tweetDao.getFriendsTweets(user_id);	
             for (Tweet tweet : tweets) {
             	res = res + tweet;
             }

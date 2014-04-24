@@ -81,6 +81,35 @@ public class TweetDAO {
         return list;
     }
     
+    public List<Tweet> getFriendsTweets(int userid) throws SQLException {
+        List<Tweet> list = new ArrayList<Tweet>();
+        Tweet tweet = null;
+        ResultSet rs = null;
+        try {
+            connection = TwitterConnection.getConnection();
+            statement = connection.createStatement();
+            String query = "SELECT * FROM tweets WHERE id_user_sen IN (SELECT id_user_acc FROM friendship WHERE id_user_req = "+userid+")";
+            rs = statement.executeQuery(query);
+            while (rs.next()) {
+                tweet = new Tweet();
+                /*Retrieve one tweet details
+                and store it in tweet object*/
+                tweet.setTweetId(rs.getInt("id_tweet"));
+                tweet.setTweetSenderId(rs.getInt("id_user_sen"));
+                tweet.setTweetText(rs.getString("tweet"));
+                tweet.setDot(rs.getDate("date"));
+                //add each tweet to the list
+                list.add(tweet);
+            }
+          	
+        } finally {
+            DbUtil.close(rs);
+            DbUtil.close(statement);
+            DbUtil.close(connection);
+        }
+        return list;
+    }
+    
     public void insertTweet() throws SQLException, IOException {
     	Scanner scn = new Scanner(System.in);
     	String userid = null, tweet = null;
