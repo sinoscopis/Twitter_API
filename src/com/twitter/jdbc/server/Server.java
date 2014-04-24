@@ -11,14 +11,14 @@ import com.twitter.jdbc.to.*;
 /**
  * Demo Server: Contains a multi-threaded socket server sample code.
  */
-public class ServerDemo extends Thread
+public class Server extends Thread
 {
 	final static int _portNumber = 5559; //Arbitrary port number
  
 	public static void main(String[] args) 
 	{
 		try {
-			new ServerDemo().startServer();
+			new Server().startServer();
 		} catch (Exception e) {
 			System.out.println("I/O failure: " + e.getMessage());
 			e.printStackTrace();

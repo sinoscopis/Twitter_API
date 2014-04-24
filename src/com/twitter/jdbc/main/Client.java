@@ -1,12 +1,12 @@
-package com.twitter.jdbc.server;
+package com.twitter.jdbc.main;
 
 import java.io.*;
 import java.net.*;
  
-public class ClientDemo {
+public class Client {
 	public static void main(String[] args) {
 		try {
-			new ClientDemo().startClient();
+			new Client().startClient();
 		} catch (Exception e) {
 			System.out.println("Something falied: " + e.getMessage());
 			e.printStackTrace();
