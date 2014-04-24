@@ -26,6 +26,6 @@ public class Friendship {
         this.dof = dof;
     }
     public String toString() {
-    	return "Frienship [id_user_req=" + requserId + ", id_user_acc=" + accuserId + ", date=" + dof + "]";
+    	return "[" + requserId + "," + accuserId + "," + dof + "]";
     }
 }
