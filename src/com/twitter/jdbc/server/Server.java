@@ -120,6 +120,9 @@ public class Server extends Thread
 				if(clientRequest != null && clientRequest.equalsIgnoreCase("show,users")) {
 					reply = getUsersServer();
 				}
+				if(clientRequest != null && clientRequest.equalsIgnoreCase("countusers")) {
+					reply = Integer.toString(getUsersCountServer());
+				}
 				else if(clientRequest != null && clientRequest.startsWith("showid,")) {
 					peticion = clientRequest.split(",", 2);
 					reply = getUsrTweetsServer(Integer.parseInt(peticion[1]));
@@ -151,6 +154,17 @@ public class Server extends Thread
 			}
  
 			return reply;
+		}
+
+		private int getUsersCountServer() throws IOException {		
+			UserDAO userDao = new UserDAO();
+	    	int res = 0;
+	        try {
+	            res = userDao.countUsers();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return res;
 		}
 	}
 	
@@ -238,7 +252,7 @@ public class Server extends Thread
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "New user insert";
+        return "inserted";
     }
     
     private static String addTweetServer(int user, String tweet) throws IOException {

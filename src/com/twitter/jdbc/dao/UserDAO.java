@@ -64,6 +64,25 @@ public class UserDAO {
         }
     }
     
+    public int countUsers() throws SQLException, IOException {
+	    String query = "SELECT count(*) FROM users";
+	    int count = 0;
+	    ResultSet rs = null;
+	    try {
+	        connection = TwitterConnection.getConnection();
+	        statement = connection.createStatement();
+	        rs = statement.executeQuery(query);
+	        while (rs.next()) {
+	            count = rs.getInt("count(*)");
+	        }
+	    } finally {
+	        DbUtil.close(rs);
+	        DbUtil.close(statement);
+	        DbUtil.close(connection);
+	    }
+	    return count;
+    }
+    
     public void insertUser(String new_user) throws SQLException, IOException {
         try {
             String query = "INSERT INTO Twitter.users (id_user, name_user, id_last_tweet) VALUES (NULL, '"+ new_user +"', NULL);";
