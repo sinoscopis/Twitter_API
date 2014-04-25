@@ -141,6 +141,7 @@ public class TweetDAO {
             DbUtil.close(connection);
         }
     }
+    
     public String insertTweet(int userid, String tweet) throws SQLException, IOException {
     	ResultSet rs = null;
         try {

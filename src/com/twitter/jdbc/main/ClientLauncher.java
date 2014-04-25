@@ -20,9 +20,70 @@ public class ClientLauncher {
 		}
 		usr_num = usernumber();
 		
+		for(int i=1; i<=(usr_num/2); i++){
+		
+			double randNumber1 = Math.random();
+			double d1 = randNumber1 * usr_num;
+			int randomUsr1 = (int)d1;
+			
+			double randNumber2 = Math.random();
+			double d2 = randNumber2 * usr_num;
+			int randomUsr2 = (int)d2;
+			
+			friend2(randomUsr1,randomUsr2);
+		
+		}
+
+
+		
 
 	}
 		
+
+	private static void friend2(int usr_req, int usr_acc) throws IOException {
+		// TODO Auto-generated method stub
+		Socket socket = null;
+		PrintWriter out = null;
+		BufferedReader in = null;
+		InetAddress host = null;
+ 
+		try {
+			host = InetAddress.getLocalHost();
+			socket = new Socket(host.getHostName(), 5559);
+ 
+			out = new PrintWriter(socket.getOutputStream(), true);
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+ 
+			String fromServer;
+			String fromUser = null;
+ 
+			//Read from socket and write back the response to server. 
+			while ((fromServer = in.readLine()) != null) {
+				System.out.println("Server - " + fromServer);
+				if (fromServer.equals("exit"))
+					break;
+				if (fromServer.equals("friends")){
+					break;
+				}
+				fromUser = "insertfriendship,"+usr_req+","+ usr_acc;
+				if (fromUser != null) {
+					System.out.println("Client - " + fromUser);
+					out.println(fromUser);
+				}
+			}
+		} catch (UnknownHostException e) {
+			System.err.println("Cannot find the host: " + host.getHostName());
+			System.exit(1);
+		} catch (IOException e) {
+			System.err.println("Couldn't read/write from the connection: " + e.getMessage());
+			System.exit(1);
+		} finally { //Make sure we always clean up
+			out.close();
+			in.close();
+			socket.close();
+		}
+	}
+
 
 	public static String randomIdentifier(){
 		final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";

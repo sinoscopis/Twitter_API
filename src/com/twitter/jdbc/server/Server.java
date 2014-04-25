@@ -120,7 +120,7 @@ public class Server extends Thread
 				if(clientRequest != null && clientRequest.equalsIgnoreCase("show,users")) {
 					reply = getUsersServer();
 				}
-				if(clientRequest != null && clientRequest.equalsIgnoreCase("countusers")) {
+				else if(clientRequest != null && clientRequest.equalsIgnoreCase("countusers")) {
 					reply = Integer.toString(getUsersCountServer());
 				}
 				else if(clientRequest != null && clientRequest.startsWith("showid,")) {
@@ -136,6 +136,10 @@ public class Server extends Thread
 				else if(clientRequest != null && clientRequest.startsWith("insertuser,")) {
 					peticion = clientRequest.split(",", 2);
 					reply = addUserServer(peticion[1]);
+				}
+				else if(clientRequest != null && clientRequest.startsWith("insertfriendship,")) {
+					peticion = clientRequest.split(",", 3);
+					reply = addFriendshipServer(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
 				}
 				else if(clientRequest != null && clientRequest.startsWith("inserttweet,")) {
 					peticion = clientRequest.split(",", 3);
@@ -154,6 +158,18 @@ public class Server extends Thread
 			}
  
 			return reply;
+		}
+
+		private String addFriendshipServer(int usr_req, int usr_acc) {
+			// TODO Auto-generated method stub
+			
+			FriendshipDAO friendshipDao = new FriendshipDAO();     
+	        try {
+	        		friendshipDao.befriends(usr_req,usr_acc);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return "friends";
 		}
 
 		private int getUsersCountServer() throws IOException {		

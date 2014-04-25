@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.twitter.jdbc.db.TwitterConnection;
 import com.twitter.jdbc.db.DbUtil;
 import com.twitter.jdbc.to.Friendship;
@@ -42,4 +43,19 @@ public class FriendshipDAO {
         }
         return list;
     }
+
+	public void befriends(int usr_req, int usr_acc) throws SQLException {
+        try {
+            connection = TwitterConnection.getConnection();
+	        statement = connection.createStatement();
+	        String query = "INSERT INTO Twitter.friendship (id_user_req,id_user_acc) VALUES ("+ usr_req +"," + usr_acc + ");";
+          	statement.executeQuery(query);
+        } catch (SQLException e){
+        	
+        }
+        finally {
+            DbUtil.close(statement);
+            DbUtil.close(connection);
+        }
+	}
 }
