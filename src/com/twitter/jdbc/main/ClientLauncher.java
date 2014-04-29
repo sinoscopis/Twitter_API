@@ -20,28 +20,15 @@ public class ClientLauncher {
 		}
 		usr_num = usernumber();
 		
-		for(int i=1; i<=(usr_num/2); i++){
+		randomizeFriendships(usr_num);
 		
-			double randNumber1 = Math.random();
-			double d1 = randNumber1 * usr_num;
-			int randomUsr1 = (int)d1;
+		while (true){
 			
-			double randNumber2 = Math.random();
-			double d2 = randNumber2 * usr_num;
-			int randomUsr2 = (int)d2;
-			
-			friend2(randomUsr1,randomUsr2);
-		
 		}
-
-
-		
-
 	}
-		
+	
 
 	private static void friend2(int usr_req, int usr_acc) throws IOException {
-		// TODO Auto-generated method stub
 		Socket socket = null;
 		PrintWriter out = null;
 		BufferedReader in = null;
@@ -83,7 +70,6 @@ public class ClientLauncher {
 			socket.close();
 		}
 	}
-
 
 	public static String randomIdentifier(){
 		final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
@@ -146,5 +132,21 @@ public class ClientLauncher {
 			socket.close();
 		}
 		return usersnumber;
+	}
+
+	private static void randomizeFriendships(int usr_num) throws IOException{
+		for(int i=1; i<=(usr_num/2); i++){
+			
+			double randNumber1 = Math.random();
+			double d1 = randNumber1 * usr_num;
+			int randomUsr1 = (int)d1;
+			
+			double randNumber2 = Math.random();
+			double d2 = randNumber2 * usr_num;
+			int randomUsr2 = (int)d2;
+			
+			if (randomUsr1 != randomUsr2)
+				friend2(randomUsr1,randomUsr2);
+		}
 	}
 }

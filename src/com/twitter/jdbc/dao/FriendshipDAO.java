@@ -48,10 +48,10 @@ public class FriendshipDAO {
         try {
             connection = TwitterConnection.getConnection();
 	        statement = connection.createStatement();
-	        String query = "INSERT INTO Twitter.friendship (id_user_req,id_user_acc) VALUES ("+ usr_req +"," + usr_acc + ");";
-          	statement.executeQuery(query);
+	        String query = "INSERT INTO friendship (id_user_req,id_user_acc) VALUES ("+ usr_req +"," + usr_acc + ");";
+          	statement.executeUpdate(query);
         } catch (SQLException e){
-        	
+        	System.out.println("Adding friendship failed:"+ e.getSQLState());
         }
         finally {
             DbUtil.close(statement);
