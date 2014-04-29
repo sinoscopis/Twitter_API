@@ -58,13 +58,14 @@ public class Client {
 		}
 	}
 	
-	public int startRandomClient(String name) throws IOException {
+	public int startRandomClient(String name) throws IOException, InterruptedException {
 		 
 		Socket socket = null;
 		PrintWriter out = null;
 		BufferedReader in = null;
 		InetAddress host = null;
 		int usersnumber = 0;
+		String peticion[];
 		//BufferedReader stdIn = null;
  
 		try {
@@ -83,8 +84,18 @@ public class Client {
 				System.out.println("Server - " + fromServer);
 				if (fromServer.equals("exit"))
 					break;
-				if (fromServer.equals("inserted")){
-					break;
+				if (fromServer.startsWith("inserted,")){
+					peticion = fromServer.split(",", 2);
+					int user = Integer.parseInt(peticion[1]);
+					//while (true){
+						//wait((long)(Math.random() * 100));
+						fromUser = "insertrandomtweet,"+user;
+						if (fromUser != null) {
+							System.out.println("Client - " + fromUser);
+							out.println(fromUser);
+						}
+						break;
+					//}
 				}
 				//fromUser = stdIn.readLine();
 				fromUser = "insertuser,"+name;
