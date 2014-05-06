@@ -22,10 +22,6 @@ public class Server extends Thread
 		
 		try {
 			 serverSocket = new ServerSocket(_portNumber);
-			
-			 
-			 //System.out.println("Client connected to socket: " + _socket.toString());
-			 
 		
 		} catch (IOException e) {
 			System.err.println("Could not listen on port: " + _portNumber);
@@ -34,29 +30,9 @@ public class Server extends Thread
 		
 		try {
 			while(true){
-				 _socket=serverSocket.accept();
-				 System.out.println("Client connected to socket: " + _socket.toString());
-				_out = new PrintWriter(_socket.getOutputStream(), true);
-				_in = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
-
-				String inputLine, outputLine;
-				BusinessLogic businessLogic = new BusinessLogic();
-				outputLine = businessLogic.processInput(null);
-				_out.println(outputLine);
-
-				//Read from socket and write back the response to client. 
-				while ((inputLine = _in.readLine()) != null) {
-					outputLine = businessLogic.processInput(inputLine);
-					if(outputLine != null) {
-						_out.println(outputLine);
-						if (outputLine.equals("exit")) {
-							System.out.println("Server is closing socket for client:" + _socket.getLocalSocketAddress());
-							break;
-						}
-					} else {
-						System.out.println("OutputLine is null!!!");
-					}
-				}
+				_socket=serverSocket.accept();
+				Runnable connectionRequesthandler = new ConnectionRequestHandler(_socket);
+				new Thread(connectionRequesthandler).start();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
