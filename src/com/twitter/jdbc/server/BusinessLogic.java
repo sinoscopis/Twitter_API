@@ -48,7 +48,10 @@ public class BusinessLogic {
 			}
 			else if(clientRequest != null && clientRequest.startsWith("insertfriendship,")) {
 				peticion = clientRequest.split(",", 3);
-				reply = addFriendshipServer(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
+				if (Integer.parseInt(peticion[1]) == Integer.parseInt(peticion[2]))
+					reply = addFriendshipServer(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
+				else
+					reply = "NO puedes hacerte amigo de ti mismo";
 			}
 			else if(clientRequest != null && clientRequest.startsWith("inserttweet,")) {
 				peticion = clientRequest.split(",", 3);
@@ -57,6 +60,10 @@ public class BusinessLogic {
 			else if(clientRequest != null && clientRequest.startsWith("insertrandomtweet,")) {
 				peticion = clientRequest.split(",", 2);
 				reply = addRandomTweetServer(Integer.parseInt(peticion[1]));
+			}
+			else if(clientRequest != null && clientRequest.startsWith("retweet,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = addReTweetServer(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
 			}
 			else if(clientRequest != null && clientRequest.startsWith("friendstweets,")) {
 				peticion = clientRequest.split(",", 2);
@@ -71,6 +78,17 @@ public class BusinessLogic {
 		}
 
 		return reply;
+	}
+
+	private String addReTweetServer(int user, int id_tweet) throws IOException {
+		TweetDAO tweetDao = new TweetDAO(); 
+           String reply = "";
+           try {
+           		reply = tweetDao.insertReTweet(user,id_tweet);
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+           return reply;
 	}
 
 	private String addRandomTweetServer(int user) throws IOException {

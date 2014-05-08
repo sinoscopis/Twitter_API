@@ -166,4 +166,26 @@ public class TweetDAO {
             DbUtil.close(connection);
         }
     }
+
+	public String insertReTweet(int userid, int id_tweet) throws SQLException, IOException {
+		ResultSet rs = null;
+        try {
+            connection = TwitterConnection.getConnection();
+	        statement = connection.createStatement();
+	        String check = "SELECT tweets.id_tweet,tweets.tweet FROM tweets WHERE tweets.id_tweet ="+ id_tweet;
+          	rs = statement.executeQuery(check);
+          	boolean val = rs.next();
+          	if (val == false)
+           		return "Imposible retweet, No existe tal tweet";
+           	else{
+           		String tweet = rs.getString("tweet");
+           		String query = "INSERT INTO Twitter.tweets (id_tweet, id_user_sen, date, tweet, retweet) VALUES (NULL, "+ userid +", NULL, '"+ tweet +"','" + id_tweet + "');";	            
+            	statement.executeUpdate(query);
+            	return "ReTweet insertado correctamente";
+           	}
+        } finally {
+            DbUtil.close(statement);
+            DbUtil.close(connection);
+        }
+	}
 }
