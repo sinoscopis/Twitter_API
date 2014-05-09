@@ -1,5 +1,6 @@
 package com.twitter.jdbc.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -92,17 +93,39 @@ public class BusinessLogic {
 	}
 
 	private String addRandomTweetServer(int user) throws IOException {
-		TweetDAO tweetDao = new TweetDAO(); 
-		String tweet=randomIdentifier(140);
-           String reply = "";
-           try {
-           		reply = tweetDao.insertTweet(user,tweet);
-           } catch (SQLException e) {
-               e.printStackTrace();
-           }
-           return reply;
+		TweetDAO tweetDao = new TweetDAO();
+		double randNumber = Math.random();
+		double d1 = randNumber * 10;
+		int prob = (int)d1+1;
+		String tweet;
+		if (prob == 1)
+			tweet=randomFile();
+		else
+			tweet=randomIdentifier(140);
+       	String reply = "";
+       	try {
+	   		reply = tweetDao.insertTweet(user,tweet);
+       	} catch (SQLException e) {
+       		e.printStackTrace();
+       	}
+       	return reply;
 	}
 	
+	public static String randomFile() {
+		// Directory path here
+		String path = "C:\\Users\\Alberto\\workspace\\Content"; 
+		String files = null;
+		File folder = new File(path);
+		File[] listOfFiles = folder.listFiles();
+		
+		double randNumber = Math.random();
+		double d1 = randNumber * listOfFiles.length;
+		int prob = (int)d1+1;
+		
+		return "http://localhost/" + listOfFiles[prob].getName();
+	}
+	
+
 	public static String randomIdentifier(int max_length) {
 		final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
 		final java.util.Random rand = new java.util.Random();
