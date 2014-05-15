@@ -181,7 +181,7 @@ public class TweetDAO {
            		String tweet = rs.getString("tweet");
            		String query = "INSERT INTO Twitter.tweets (id_tweet, id_user_sen, date, tweet, retweet) VALUES (NULL, "+ userid +", NULL, '"+ tweet +"','" + id_tweet + "');";	            
             	statement.executeUpdate(query);
-            	return "ReTweet insertado correctamente";
+            	return "ReTweet - (" + tweet + ") - From - [" + userid + "] ";
            	}
         } finally {
             DbUtil.close(statement);

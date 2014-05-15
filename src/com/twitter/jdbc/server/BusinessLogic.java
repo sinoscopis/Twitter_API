@@ -49,7 +49,7 @@ public class BusinessLogic {
 			}
 			else if(clientRequest != null && clientRequest.startsWith("insertfriendship,")) {
 				peticion = clientRequest.split(",", 3);
-				if (Integer.parseInt(peticion[1]) == Integer.parseInt(peticion[2]))
+				if (Integer.parseInt(peticion[1]) != Integer.parseInt(peticion[2]))
 					reply = addFriendshipServer(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
 				else
 					reply = "NO puedes hacerte amigo de ti mismo";
@@ -114,13 +114,12 @@ public class BusinessLogic {
 	public static String randomFile() {
 		// Directory path here
 		String path = "C:\\Users\\Alberto\\workspace\\Content"; 
-		String files = null;
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		
 		double randNumber = Math.random();
 		double d1 = randNumber * listOfFiles.length;
-		int prob = (int)d1+1;
+		int prob = (int)d1;
 		
 		return "http://localhost/" + listOfFiles[prob].getName();
 	}
