@@ -27,7 +27,10 @@ public class BusinessLogic {
 				return "exit";
 			}
 			if(clientRequest != null && clientRequest.equalsIgnoreCase("Retweet analizado")) {
-				return "gracias";
+				return "continua";
+			}
+			if(clientRequest != null && clientRequest.equalsIgnoreCase("No retweeteo")) {
+				return "continua";
 			}
 			if(clientRequest != null && clientRequest.equalsIgnoreCase("show,users")) {
 				reply = getUsersServer();
