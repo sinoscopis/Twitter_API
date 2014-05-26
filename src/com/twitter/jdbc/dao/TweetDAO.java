@@ -188,4 +188,32 @@ public class TweetDAO {
             DbUtil.close(connection);
         }
 	}
+	
+
+	public String seeTweet(int id_tweet) throws SQLException {
+		String query = "SELECT * FROM tweets WHERE id_tweet = "+id_tweet;
+        Tweet tweet = null;
+        ResultSet rs = null;
+        try {
+            connection = TwitterConnection.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            while (rs.next()) {
+                tweet = new Tweet();
+                /*Retrieve one tweet details
+                and store it in tweet object*/
+                tweet.setTweetId(rs.getInt("id_tweet"));
+                tweet.setTweetSenderId(rs.getInt("id_user_sen"));
+                tweet.setTweetText(rs.getString("tweet"));
+                tweet.setDot(rs.getDate("date"));
+                //add each tweet to the list
+            }
+        } finally {
+            DbUtil.close(rs);
+            DbUtil.close(statement);
+            DbUtil.close(connection);
+        }
+        return tweet.toString();
+	}
+	
 }

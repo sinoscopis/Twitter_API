@@ -42,6 +42,10 @@ public class BusinessLogic {
 				peticion = clientRequest.split(",", 2);
 				reply = getUsrTweetsServer(Integer.parseInt(peticion[1]));
 			}
+			else if(clientRequest != null && clientRequest.startsWith("Consumo,")) {
+				peticion = clientRequest.split(",", 2);
+				reply = consumirTweet(Integer.parseInt(peticion[1]));
+			}
 			else if(clientRequest != null && clientRequest.equalsIgnoreCase("show,tweets")) {
 				reply = getTweetsServer();
 			}
@@ -86,6 +90,17 @@ public class BusinessLogic {
 		return reply;
 	}
 
+	private String consumirTweet(int id_tweet) {
+		TweetDAO tweetDao = new TweetDAO(); 
+        String reply = "";
+        try {
+        	reply = tweetDao.seeTweet(id_tweet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Consumir -"+reply;
+	}
+
 	private String addReTweetServer(int user, int id_tweet) throws IOException {
 		TweetDAO tweetDao = new TweetDAO(); 
            String reply = "";
@@ -118,7 +133,7 @@ public class BusinessLogic {
 	
 	public static String randomFile() {
 		// Directory path here
-		String path = "C:\\Users\\Alberto\\workspace\\Content"; 
+		String path = "C:\\Users\\Alberto\\workspace\\Twitter_API\\Content"; 
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		
@@ -128,7 +143,6 @@ public class BusinessLogic {
 		
 		return "http://localhost/" + listOfFiles[prob].getName();
 	}
-	
 
 	public static String randomIdentifier(int max_length) {
 		final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
