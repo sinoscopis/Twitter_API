@@ -1,4 +1,4 @@
-package com.twitter.jdbc.dao;
+package twitter.dao;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,9 +10,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.twitter.jdbc.db.TwitterConnection;
-import com.twitter.jdbc.db.DbUtil;
-import com.twitter.jdbc.to.User;
+import twitter.db.DbUtil;
+import twitter.db.TwitterConnection;
+import twitter.to.User;
  
 public class UserDAO {
     private Connection connection;

@@ -1,4 +1,4 @@
-package com.twitter.jdbc.dao;
+package twitter.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,9 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.twitter.jdbc.db.TwitterConnection;
-import com.twitter.jdbc.db.DbUtil;
-import com.twitter.jdbc.to.Friendship;
+import twitter.db.DbUtil;
+import twitter.db.TwitterConnection;
+import twitter.to.Friendship;
  
 public class FriendshipDAO {
     private Connection connection;

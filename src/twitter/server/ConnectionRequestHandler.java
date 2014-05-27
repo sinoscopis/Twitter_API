@@ -1,4 +1,4 @@
-package com.twitter.jdbc.server;
+package twitter.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;

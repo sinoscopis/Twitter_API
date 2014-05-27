@@ -1,4 +1,4 @@
-package com.twitter.jdbc.to;
+package twitter.to;
 
 import java.util.Date;
 

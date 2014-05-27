@@ -1,4 +1,4 @@
-package com.twitter.jdbc.server;
+package twitter.server;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,12 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.twitter.jdbc.dao.FriendshipDAO;
-import com.twitter.jdbc.dao.TweetDAO;
-import com.twitter.jdbc.dao.UserDAO;
-import com.twitter.jdbc.to.Friendship;
-import com.twitter.jdbc.to.Tweet;
-import com.twitter.jdbc.to.User;
+import twitter.dao.FriendshipDAO;
+import twitter.dao.TweetDAO;
+import twitter.dao.UserDAO;
+import twitter.to.Friendship;
+import twitter.to.Tweet;
+import twitter.to.User;
 
 /**
  * Handles business logic of application.

@@ -1,4 +1,4 @@
-package com.twitter.jdbc.to;
+package twitter.to;
 
 public class User {
     private int userId;

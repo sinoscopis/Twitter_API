@@ -1,4 +1,4 @@
-package com.twitter.jdbc.dao;
+package twitter.dao;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.twitter.jdbc.db.TwitterConnection;
-import com.twitter.jdbc.db.DbUtil;
-import com.twitter.jdbc.to.Tweet;
+import twitter.db.DbUtil;
+import twitter.db.TwitterConnection;
+import twitter.to.Tweet;
  
 public class TweetDAO {
     private Connection connection;

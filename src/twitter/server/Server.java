@@ -1,4 +1,4 @@
-package com.twitter.jdbc.server;
+package twitter.server;
 
 import java.net.*;
 import java.io.*;
@@ -10,7 +10,9 @@ import java.io.*;
 public class Server extends Thread
 {
 	final static int _portNumber = 55555; //Arbitrary port number
+	final static int _transferPort = 55055;
 	private Socket _socket = null;
+	private Socket _transfersocket = null;
 	private PrintWriter _out = null;
 	private BufferedReader _in = null;
 	private ServerSocket serverSocket = null;
@@ -30,6 +32,7 @@ public class Server extends Thread
 		
 		try {
 			while(true){
+				
 				_socket=serverSocket.accept();
 				Runnable connectionRequesthandler = new ConnectionRequestHandler(_socket);
 				new Thread(connectionRequesthandler).start();
@@ -41,6 +44,7 @@ public class Server extends Thread
 				_out.close();
 				_in.close();
 				_socket.close();
+				_transfersocket.close();
 			} catch(Exception e) { 
 				System.out.println("Couldn't close I/O streams");
 			}
