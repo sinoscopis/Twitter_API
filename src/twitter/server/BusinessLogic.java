@@ -133,7 +133,7 @@ public class BusinessLogic {
 	
 	public static String randomFile() {
 		// Directory path here
-		String path = "C:\\Users\\Alberto\\workspace\\Twitter_API\\Content"; 
+		String path = "C:\\Users\\Alberto\\workspace\\Transfer_server\\Content"; 
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		
@@ -163,8 +163,6 @@ public class BusinessLogic {
 	}
 
 	private String addFriendshipServer(int usr_req, int usr_acc) {
-		// TODO Auto-generated method stub
-		
 		FriendshipDAO friendshipDao = new FriendshipDAO();     
         try {
         		friendshipDao.befriends(usr_req,usr_acc);
@@ -239,7 +237,6 @@ public class BusinessLogic {
             for (Tweet tweet : tweets) {
             	res = res + tweet;
             }
-            System.out.println();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -255,7 +252,6 @@ public class BusinessLogic {
             for (Tweet tweet : tweets) {
             	res = res + tweet;
             }
-            System.out.println();
         } catch (SQLException e) {
             e.printStackTrace();
         }
