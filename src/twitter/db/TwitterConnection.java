@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class TwitterConnection {
     //static reference to itself
     private static TwitterConnection instance = new TwitterConnection();
-    public static final String URL = "jdbc:mysql://192.168.10.37:3306/Twitter";
-    public static final String USER = "alberto";
-    public static final String PASSWORD = "alberto";
+    public static String URL /*= "jdbc:mysql://192.168.10.37:3306/Twitter"*/;
+    public static String USER /*= "alberto"*/;
+    public static String PASSWORD/* = "alberto"*/;
     //public static final String DRIVER_CLASS = "com.mysql.jdbc.Driver"; 
  
     //private constructor

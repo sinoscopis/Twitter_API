@@ -3,6 +3,8 @@ package twitter.server;
 import java.net.*;
 import java.io.*;
 
+import twitter.db.TwitterConnection;
+
  
 /**
  * Demo Server: Contains a multi-threaded socket server sample code.
@@ -18,6 +20,20 @@ public class Server extends Thread
 	private ServerSocket serverSocket = null;
 
 	public static void main(String[] args) {
+		if (args.length > 0) {
+		    try {
+		    	String Twitter_url = "jdbc:mysql://"+args[0]+":3306/Twitter";
+		        TwitterConnection.URL =Twitter_url;
+		        TwitterConnection.USER = args[1];
+		        TwitterConnection.PASSWORD = args[2];
+		    } catch (Exception e) {
+		        System.err.println("Server.jar Twiter_IP User Password");
+		    }
+		}
+		else{
+			System.err.println("Server.jar Twiter_IP User Password");
+			System.exit(1);
+		}
 		new Server().run();
 	}
 	public void run() {
