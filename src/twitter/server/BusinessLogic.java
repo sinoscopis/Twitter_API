@@ -132,10 +132,16 @@ public class BusinessLogic {
 	}
 	
 	public static String randomFile() {
-		// Directory path here
-		String path = "C:\\Users\\Alberto\\workspace\\Transfer_server\\Content"; 
-		File folder = new File(path);
-		File[] listOfFiles = folder.listFiles();
+		 String sSistemaOperativo = System.getProperty("os.name");
+		 String path = null;
+		 if(sSistemaOperativo.startsWith("Win")){
+			 path = ".\\Server_Content";
+		 }
+		 else {
+			 path = "./Server_Content";
+		 }
+		 File folder = new File(path);
+		 File[] listOfFiles = folder.listFiles();
 		
 		double randNumber = Math.random();
 		double d1 = randNumber * listOfFiles.length;
