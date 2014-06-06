@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import twitter.dao.FollowersDAO;
 import twitter.dao.FriendshipDAO;
 import twitter.dao.TweetDAO;
 import twitter.dao.UserDAO;
@@ -75,6 +76,10 @@ public class BusinessLogic {
 				peticion = clientRequest.split(",", 3);
 				reply = addReTweetServer(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
 			}
+			else if(clientRequest != null && clientRequest.startsWith("insertfollowersbycluster,")) {
+				peticion = clientRequest.split(",", 4);
+				reply = addFollowersByCluster(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]),Integer.parseInt(peticion[3]));
+			}
 			else if(clientRequest != null && clientRequest.startsWith("friendstweets,")) {
 				peticion = clientRequest.split(",", 2);
 				reply = getTweetsServer(Integer.parseInt(peticion[1]));
@@ -88,6 +93,16 @@ public class BusinessLogic {
 		}
 
 		return reply;
+	}
+
+	private String addFollowersByCluster(int user, int num_friends,int cluster) throws IOException {
+		FollowersDAO followersDao = new FollowersDAO();     
+        try {
+        	followersDao.insertOnCluster(user,num_friends,cluster);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+		return "Followers_set";
 	}
 
 	private String consumirTweet(int id_tweet) {
@@ -135,7 +150,8 @@ public class BusinessLogic {
 		 String sSistemaOperativo = System.getProperty("os.name");
 		 String path = null;
 		 if(sSistemaOperativo.startsWith("Win")){
-			 path = ".\\Server_Content";
+			 path = "C:\\Users\\Alberto\\Desktop\\Server_Content";
+			 //path = ".\\Server_Content";
 		 }
 		 else {
 			 path = "./Server_Content";

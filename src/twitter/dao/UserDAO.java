@@ -35,7 +35,6 @@ public class UserDAO {
                 and store it in user object*/
                 user.setUserId(rs.getInt("id_user"));
                 user.setUserName(rs.getString("name_user"));
-                user.setLastTweetId(rs.getInt("id_last_tweet"));
  
                 //add each user to the list
                 list.add(user);
@@ -54,7 +53,7 @@ public class UserDAO {
         	BufferedReader br = new BufferedReader (isr);
         	System.out.println("Nombre del nuevo usuario:");
         	String new_user = br.readLine();
-            String query = "INSERT INTO Twitter.users (id_user, name_user, id_last_tweet) VALUES (NULL, '"+ new_user +"', NULL);";
+            String query = "INSERT INTO Twitter.users (id_user, name_user) VALUES (NULL, '"+ new_user +"');";
             connection = TwitterConnection.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
@@ -85,7 +84,7 @@ public class UserDAO {
     
     public void insertUser(String new_user) throws SQLException, IOException {
         try {
-            String query = "INSERT INTO Twitter.users (id_user, name_user, id_last_tweet) VALUES (NULL, '"+ new_user +"', NULL);";
+            String query = "INSERT INTO Twitter.users (id_user, name_user) VALUES (NULL, '"+ new_user +"');";
             connection = TwitterConnection.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
