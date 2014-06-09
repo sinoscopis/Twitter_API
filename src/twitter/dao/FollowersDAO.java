@@ -49,7 +49,7 @@ public class FollowersDAO {
 	    
 	    public void insertOnCluster(int user,int friends, int cache) throws SQLException, IOException {
 	        try {
-	            String query = "INSERT INTO Twitter.followersByCluster (user_id, cache,friends) VALUES ("+ user +", "+ cache +","+ friends+");";
+	            String query = "INSERT INTO Twitter.followersByCluster (user_id, cache,friends) VALUES ("+ user +", "+ cache +","+ friends+") ON DUPLICATE KEY UPDATE friends=friends+" + friends + ";";
 	            connection = TwitterConnection.getConnection();
 	            statement = connection.createStatement();
 	            statement.executeUpdate(query);
