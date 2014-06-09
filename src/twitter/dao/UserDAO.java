@@ -82,9 +82,9 @@ public class UserDAO {
 	    return count;
     }
     
-    public void insertUser(String new_user) throws SQLException, IOException {
+    public void insertUser(String new_user,int cache) throws SQLException, IOException {
         try {
-            String query = "INSERT INTO Twitter.users (id_user, name_user) VALUES (NULL, '"+ new_user +"');";
+            String query = "INSERT INTO Twitter.users (id_user, name_user,cache) VALUES (NULL, '"+ new_user +"','" + cache +"');";
             connection = TwitterConnection.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
@@ -93,4 +93,5 @@ public class UserDAO {
             DbUtil.close(connection);
         }
     }
+
 }

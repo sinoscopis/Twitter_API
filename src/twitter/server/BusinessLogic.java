@@ -54,8 +54,8 @@ public class BusinessLogic {
 				reply = getFriendshipsServer();
 			}
 			else if(clientRequest != null && clientRequest.startsWith("insertuser,")) {
-				peticion = clientRequest.split(",", 2);
-				reply = addUserServer(peticion[1]);
+				peticion = clientRequest.split(",", 3);
+				reply = addUserServer(peticion[1],Integer.parseInt(peticion[2]));
 			}
 			else if(clientRequest != null && clientRequest.startsWith("insertfriendship,")) {
 				peticion = clientRequest.split(",", 3);
@@ -280,10 +280,10 @@ public class BusinessLogic {
         return res;
     }
 	
-	static String addUserServer(String new_user) throws IOException {
+	static String addUserServer(String new_user,int cache) throws IOException {
         UserDAO userDao = new UserDAO();     
         try {
-        		userDao.insertUser(new_user);
+        		userDao.insertUser(new_user,cache);
         		int id_user= userDao.countUsers();
         		String usr = Integer.toString(id_user);
         		String reply="inserted,"+ usr;
