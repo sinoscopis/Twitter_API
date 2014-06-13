@@ -51,7 +51,7 @@ public class FriendshipDAO {
 	        statement = connection.createStatement();
 	        String query = "INSERT INTO friendship (id_user_req,id_user_acc) VALUES ("+ usr_req +"," + usr_acc + ");";
           	statement.executeUpdate(query);
-          	String query2 = "SELECT cache FROM users WHERE id_user="+usr_req+";";
+          	String query2 = "SELECT cache FROM users WHERE id_user="+usr_acc+";";
           	rs = statement.executeQuery(query2);
           	int cache = 0;
 			while (rs.next()) {
