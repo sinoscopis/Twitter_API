@@ -84,7 +84,7 @@ public class UserDAO {
     
     public void insertUser(String new_user,int cache) throws SQLException, IOException {
         try {
-            String query = "INSERT INTO Twitter.users (id_user, name_user,cache) VALUES (NULL, '"+ new_user +"','" + cache +"');";
+            String query = "INSERT INTO Twitter.users (id_user, name_user,cache,conectado) VALUES (NULL, '"+ new_user +"','" + cache +"',FALSE);";
             connection = TwitterConnection.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate(query);
@@ -92,6 +92,52 @@ public class UserDAO {
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
+    }
+
+	public String conectUser(int cache) throws SQLException, IOException {
+		 List<User> list;
+		 int range;
+		 try {
+			 	list = getUsersInCache(cache);
+			 	double randNumber = Math.random();
+				double d = randNumber * list.size();
+				range = (int)d;
+		        String query = "UPDATE users SET conectado=TRUE WHERE (cache="+ cache +" and conectado=FALSE and id_user="+ list.get(range).getUserId() +")";
+		        connection = TwitterConnection.getConnection();
+		        statement = connection.createStatement();
+		        statement.executeUpdate(query);
+		    } finally {
+		        DbUtil.close(statement);
+		        DbUtil.close(connection);
+		    }
+		 return "conectado,"+ list.get(range).getUserId();
+	}
+	
+	public List<User> getUsersInCache(int cache) throws SQLException {
+        String query = "SELECT * FROM users WHERE cache="+cache;
+        List<User> list = new ArrayList<User>();
+        User user = null;
+        ResultSet rs = null;
+        try {
+            connection = TwitterConnection.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            while (rs.next()) {
+                user = new User();
+                /*Retrieve one user details
+                and store it in user object*/
+                user.setUserId(rs.getInt("id_user"));
+                user.setUserName(rs.getString("name_user"));
+ 
+                //add each user to the list
+                list.add(user);
+            }
+        } finally {
+            DbUtil.close(rs);
+            DbUtil.close(statement);
+            DbUtil.close(connection);
+        }
+        return list;
     }
 
 }

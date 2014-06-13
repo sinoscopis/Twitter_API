@@ -36,8 +36,15 @@ public class BusinessLogic {
 			if(clientRequest != null && clientRequest.equalsIgnoreCase("show,users")) {
 				reply = getUsersServer();
 			}
+			else if(clientRequest != null && clientRequest.equalsIgnoreCase("conectado_almacenado")) {
+				return "continua";
+			}
 			else if(clientRequest != null && clientRequest.equalsIgnoreCase("countusers")) {
 				reply = Integer.toString(getUsersCountServer());
+			}
+			else if(clientRequest != null && clientRequest.startsWith("conectUser,")) {
+				peticion = clientRequest.split(",", 2);
+				reply = ConectUser(Integer.parseInt(peticion[1]));
 			}
 			else if(clientRequest != null && clientRequest.startsWith("showid,")) {
 				peticion = clientRequest.split(",", 2);
@@ -92,6 +99,17 @@ public class BusinessLogic {
 			return "exit";
 		}
 
+		return reply;
+	}
+
+	private String ConectUser(int cache) throws IOException {
+		UserDAO userDao = new UserDAO();   
+		String reply = "";
+        try {
+        	reply = userDao.conectUser(cache);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 		return reply;
 	}
 

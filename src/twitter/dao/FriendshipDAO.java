@@ -45,11 +45,20 @@ public class FriendshipDAO {
     }
 
 	public void befriends(int usr_req, int usr_acc) throws SQLException {
+		ResultSet rs = null;
         try {
             connection = TwitterConnection.getConnection();
 	        statement = connection.createStatement();
 	        String query = "INSERT INTO friendship (id_user_req,id_user_acc) VALUES ("+ usr_req +"," + usr_acc + ");";
           	statement.executeUpdate(query);
+          	String query2 = "SELECT cache FROM users WHERE id_user="+usr_req+";";
+          	rs = statement.executeQuery(query2);
+          	int cache = 0;
+			while (rs.next()) {
+                cache = (rs.getInt("cache"));
+            }
+            String query3 = "INSERT INTO Twitter.followersByCluster (user_id, cache,friends) VALUES ("+ usr_req +", "+ cache +", 1) ON DUPLICATE KEY UPDATE friends=friends+1;";
+           	statement.executeUpdate(query3);
         } catch (SQLException e){
         }
         finally {
