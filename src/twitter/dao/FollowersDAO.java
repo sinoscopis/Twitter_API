@@ -1,6 +1,5 @@
 package twitter.dao;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +18,7 @@ public class FollowersDAO {
 	 
 	    public FollowersDAO() { }
 	 
-	    public List<Follower> getUsers() throws SQLException {
+	    /*public List<Follower> getUsers() throws SQLException {
 	        String query = "SELECT * FROM followers";
 	        List<Follower> list = new ArrayList<Follower>();
 	        Follower follower = null;
@@ -30,8 +29,8 @@ public class FollowersDAO {
 	            rs = statement.executeQuery(query);
 	            while (rs.next()) {
 	            	follower = new Follower();
-	                /*Retrieve one user details
-	                and store it in user object*/
+	                Retrieve one user details
+	                and store it in user object
 	            	follower.setUserId(rs.getInt("id_user"));
 	            	follower.setCacheNum(rs.getInt("cache"));
 	            	follower.setFollowersNum((rs.getInt("followers")));
@@ -45,19 +44,34 @@ public class FollowersDAO {
 	            DbUtil.close(connection);
 	        }
 	        return list;
-	    }
-	    
-	    public void insertOnCluster(int user,int friends, int cache) throws SQLException, IOException {
+	    }*/
+
+		public List<Follower> followersbycache(int user) throws SQLException {
+			String query = "SELECT * FROM followersByCluster WHERE user_id="+user;
+	        List<Follower> list = new ArrayList<Follower>();
+	        Follower follower = null;
+	        ResultSet rs = null;
 	        try {
-	            String query = "INSERT INTO Twitter.followersByCluster (user_id, cache,friends) VALUES ("+ user +", "+ cache +","+ friends+") ON DUPLICATE KEY UPDATE friends=friends+" + friends + ";";
 	            connection = TwitterConnection.getConnection();
 	            statement = connection.createStatement();
-	            statement.executeUpdate(query);
+	            rs = statement.executeQuery(query);
+	            while (rs.next()) {
+	            	follower = new Follower();
+	                /*Retrieve one user details
+	                and store it in user object*/
+	            	follower.setUserId(rs.getInt("user_id"));
+	            	follower.setCacheNum(rs.getInt("cache"));
+	            	follower.setFollowersNum((rs.getInt("friends")));
+	 
+	                //add each user to the list
+	                list.add(follower);
+	            }
 	        } finally {
+	            DbUtil.close(rs);
 	            DbUtil.close(statement);
 	            DbUtil.close(connection);
 	        }
-	    }
-	
+	        return list;
+		}	
 	
 }

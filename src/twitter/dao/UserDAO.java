@@ -139,5 +139,21 @@ public class UserDAO {
         }
         return list;
     }
+	
 
+	public void iniciarUser(int id_user) throws SQLException {
+		connection = TwitterConnection.getConnection();
+        statement = connection.createStatement();
+        
+        String query3 = "INSERT INTO Twitter.followersByCluster (user_id,cache,friends) VALUES ('"+ id_user +"',1,0);";
+        String query4 = "INSERT INTO Twitter.followersByCluster (user_id,cache,friends) VALUES ('"+ id_user +"',2,0);";
+        String query5 = "INSERT INTO Twitter.followersByCluster (user_id,cache,friends) VALUES ('"+ id_user +"',3,0);";
+        String query6 = "INSERT INTO Twitter.followersByCluster (user_id,cache,friends) VALUES ('"+ id_user +"',4,0);";
+        String query7 = "INSERT INTO Twitter.followersByCluster (user_id,cache,friends) VALUES ('"+ id_user +"',5,0);";
+        statement.executeUpdate(query3);
+        statement.executeUpdate(query4);
+        statement.executeUpdate(query5);
+        statement.executeUpdate(query6);
+        statement.executeUpdate(query7);
+	}
 }

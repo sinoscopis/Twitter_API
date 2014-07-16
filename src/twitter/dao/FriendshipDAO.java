@@ -57,8 +57,10 @@ public class FriendshipDAO {
 			while (rs.next()) {
                 cache = (rs.getInt("cache"));
             }
-            String query3 = "INSERT INTO Twitter.followersByCluster (user_id, cache,friends) VALUES ("+ usr_req +", "+ cache +", 1) ON DUPLICATE KEY UPDATE friends=friends+1;";
-           	statement.executeUpdate(query3);
+			
+            String query8 = "INSERT INTO Twitter.followersByCluster (user_id, cache,friends) VALUES ("+ usr_req +", "+ cache +", 1) ON DUPLICATE KEY UPDATE friends=friends+1;";
+            
+            statement.executeUpdate(query8);
         } catch (SQLException e){
         }
         finally {
