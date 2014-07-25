@@ -173,15 +173,15 @@ public class BusinessLogic {
 	
 	public static String randomFile() {
 		 String sSistemaOperativo = System.getProperty("os.name");
-		 String path = null;
+		 String file_path = null;
 		 if(sSistemaOperativo.startsWith("Win")){
-			 path = "C:\\Users\\Alberto\\Desktop\\Server_Content";
-			 //path = ".\\Server_Content";
+			 file_path = "C:\\Users\\Alberto\\Desktop\\Server_Content";
+			 //file_path = ".\\Server_Content";
 		 }
 		 else {
-			 path = "./Server_Content";
+			 file_path = "./Server_Content";
 		 }
-		 File folder = new File(path);
+		 File folder = new File(file_path);
 		 File[] listOfFiles = folder.listFiles();
 		
 		double randNumber = Math.random();

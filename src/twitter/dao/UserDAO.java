@@ -98,7 +98,7 @@ public class UserDAO {
 		 List<User> list;
 		 int range;
 		 try {
-			 	list = getUsersInCache(cache);
+			 	list = getUsersOffLineInCache(cache);
 			 	double randNumber = Math.random();
 				double d = randNumber * list.size();
 				range = (int)d;
@@ -113,8 +113,8 @@ public class UserDAO {
 		 return "conectado,"+ list.get(range).getUserId();
 	}
 	
-	public List<User> getUsersInCache(int cache) throws SQLException {
-        String query = "SELECT * FROM users WHERE cache="+cache;
+	public List<User> getUsersOffLineInCache(int cache) throws SQLException {
+        String query = "SELECT * FROM users WHERE cache="+cache+" and conectado=0";
         List<User> list = new ArrayList<User>();
         User user = null;
         ResultSet rs = null;
@@ -138,8 +138,7 @@ public class UserDAO {
             DbUtil.close(connection);
         }
         return list;
-    }
-	
+    }	
 
 	public void iniciarUser(int id_user) throws SQLException {
 		connection = TwitterConnection.getConnection();

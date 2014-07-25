@@ -189,7 +189,6 @@ public class TweetDAO {
         }
 	}
 	
-
 	public String seeTweet(int id_tweet) throws SQLException {
 		String query = "SELECT * FROM tweets WHERE id_tweet = "+id_tweet;
         Tweet tweet = null;
