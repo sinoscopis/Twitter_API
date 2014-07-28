@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import twitter.dao.FilesDAO;
 import twitter.dao.FollowersDAO;
 import twitter.dao.FriendshipDAO;
 import twitter.dao.TweetDAO;
@@ -69,6 +70,14 @@ public class BusinessLogic {
 				peticion = clientRequest.split(",", 3);
 				reply = addUserServer(peticion[1],Integer.parseInt(peticion[2]));
 			}
+			else if(clientRequest != null && clientRequest.startsWith("fileInLRUCache,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = registrarFile(peticion[1],Integer.parseInt(peticion[2]),"LRU");
+			}
+			else if(clientRequest != null && clientRequest.startsWith("fileInECOCache,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = registrarFile(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN");
+			}
 			else if(clientRequest != null && clientRequest.startsWith("insertfriendship,")) {
 				peticion = clientRequest.split(",", 3);
 				if (Integer.parseInt(peticion[1]) != Integer.parseInt(peticion[2]))
@@ -102,6 +111,17 @@ public class BusinessLogic {
 
 		return reply;
 	}
+
+	private String registrarFile(String file, int cache_num, String cache_type) throws IOException {
+		FilesDAO filesDao = new FilesDAO();
+       	try {
+	   		filesDao.insertFile(file, cache_num,cache_type);
+       	} catch (SQLException e) {
+       		e.printStackTrace();
+       	}
+		return "exit";
+	}
+	
 
 	private String ConectUser(int cache) throws IOException {
 		UserDAO userDao = new UserDAO();   
