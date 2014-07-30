@@ -93,6 +93,22 @@ public class BusinessLogic {
 				peticion = clientRequest.split(",", 2);
 				reply = addRandomTweetServer(Integer.parseInt(peticion[1]));
 			}
+			else if(clientRequest != null && clientRequest.startsWith("costeLRU,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = calcularcoste(peticion[1],Integer.parseInt(peticion[2]),"LRU");
+			}
+			else if(clientRequest != null && clientRequest.startsWith("costeECO,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = calcularcoste(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN");
+			}
+			else if(clientRequest != null && clientRequest.startsWith("costeLRUwithUPD,")) {
+				peticion = clientRequest.split(",", 4);
+				reply = calcularcostewithUPD(peticion[1],Integer.parseInt(peticion[2]),"LRU",peticion[3]);
+			}
+			else if(clientRequest != null && clientRequest.startsWith("costeECOwithUPD,")) {
+				peticion = clientRequest.split(",", 4);
+				reply = calcularcostewithUPD(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN",peticion[3]);
+			}
 			else if(clientRequest != null && clientRequest.startsWith("retweet,")) {
 				peticion = clientRequest.split(",", 3);
 				reply = addReTweetServer(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
@@ -110,6 +126,63 @@ public class BusinessLogic {
 		}
 
 		return reply;
+	}
+
+	private String calcularcostewithUPD(String file, int cache_num, String cache_type, String first) throws IOException {
+		int reply = 0;
+		int[] caches = null;
+		FilesDAO filesDao = new FilesDAO();
+       	try {
+	   		caches = filesDao.cost(file, cache_num,cache_type);
+	   		filesDao.updateDeletedFile(first, cache_num, cache_type);
+	   		if (caches.length == 1){
+	   			reply=Server.costs_matrix[5][cache_num-1];
+	   		}
+	   		else{
+	   			int minimal = 10;
+	   			for(int i=0; i<caches.length; i++){
+	   				if(caches[i]==1){
+	   					if (Server.costs_matrix[i][cache_num-1]<minimal)
+	   						minimal=Server.costs_matrix[i][cache_num-1];
+	   				}
+	   			}
+	   			reply=minimal;
+	   			if (reply==0){
+	   				reply=Server.costs_matrix[5][cache_num-1];
+	   			}
+	   		}
+       	} catch (SQLException e) {
+       		e.printStackTrace();
+       	}
+		return "menorcoste,"+Integer.toString(reply);
+	}
+
+	private String calcularcoste(String file, int cache_num, String cache_type) throws IOException {
+		int reply = 0;
+		int[] caches = null;
+		FilesDAO filesDao = new FilesDAO();
+       	try {
+	   		caches = filesDao.cost(file, cache_num,cache_type);
+	   		if (caches.length == 1){
+	   			reply=Server.costs_matrix[5][cache_num-1];
+	   		}
+	   		else{
+	   			int minimal = 10;
+	   			for(int i=0; i<caches.length; i++){
+	   				if(caches[i]==1){
+	   					if (Server.costs_matrix[i][cache_num-1]<minimal)
+	   						minimal=Server.costs_matrix[i][cache_num-1];
+	   				}
+	   			}
+	   			reply=minimal;
+	   			if (reply==0){
+	   				reply=Server.costs_matrix[5][cache_num-1];
+	   			}
+	   		}
+       	} catch (SQLException e) {
+       		e.printStackTrace();
+       	}
+		return "menorcoste,"+Integer.toString(reply);
 	}
 
 	private String registrarFile(String file, int cache_num, String cache_type) throws IOException {

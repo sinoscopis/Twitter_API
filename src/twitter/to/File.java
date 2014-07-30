@@ -1,6 +1,6 @@
 package twitter.to;
 
-public class Files {
+public class File {
     private String fileName;
     private boolean cache_1;
     private boolean cache_2;

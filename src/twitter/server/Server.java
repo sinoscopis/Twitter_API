@@ -18,7 +18,26 @@ public class Server extends Thread
 	private PrintWriter _out = null;
 	private BufferedReader _in = null;
 	private ServerSocket serverSocket = null;
-
+	
+	/* 			 MATRIZ DE COSTES  €/BYTE
+	 * 
+	 * 
+	 *				US		EU		AS		SAM		OCE		SERVER
+	 *		US		0		1		2		3		4		0
+	 *  	EU		1		0		2		3		4		1
+	 *  	AS		2		2		0		3		3		2
+	 * 		SAM		3		3		3		0		4		3						
+	 * 		OCE		4		4		3		4		0		4
+	 * 		SERVER	0		1		2		3		4		0
+	 * 
+	 * */
+	public static int[][] costs_matrix= { {0,1,2,3,4,0},
+										  {1,0,2,3,4,1},
+										  {2,2,0,3,3,2},
+										  {3,3,3,0,4,3},
+										  {4,4,3,4,0,4},
+										  {0,1,2,3,4,0} };
+	
 	public static void main(String[] args) {
 		if (args.length > 0) {
 		    try {
