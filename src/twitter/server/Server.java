@@ -22,21 +22,21 @@ public class Server extends Thread
 	/* 			 MATRIZ DE COSTES  €/BYTE
 	 * 
 	 * 
-	 *				US		EU		AS		SAM		OCE		SERVER
-	 *		US		0		1		2		3		4		0
-	 *  	EU		1		0		2		3		4		1
-	 *  	AS		2		2		0		3		3		2
-	 * 		SAM		3		3		3		0		4		3						
-	 * 		OCE		4		4		3		4		0		4
-	 * 		SERVER	0		1		2		3		4		0
+	 *		US		EU		AS		SAM		OCE		SERVER
+	 *	US	{0,		6401,	10879,	7677,	15993,	1	 },		US = NEW YORK
+	 *  EU	{6401,	0,		8945,	9890,	16090,	6401 },		EU = BERLIN
+	 *  AS	{10879,	8945,	0,		18494,	7790,	10879},		AS = TOKYO
+	 *  SAM	{7677,	9890,	18494,	0,		13629,	7677 },		SAM = RIO DE JANEIRO
+	 *  OCE	{15993,	16090,	7790,	13629,	0,		15993},		OCE = SYDNEY
+	 *  SRV {1,		6401,	10879,	7677,	15993,	0	 } };	SRV = NEW YORK
 	 * 
 	 * */
-	public static int[][] costs_matrix= { {0,2,3,4,5,1},
-										  {2,0,3,4,5,2},
-										  {3,3,0,4,4,3},
-										  {4,4,4,0,5,4},
-										  {5,5,4,5,0,5},
-										  {1,2,3,4,5,0} };
+	public static int[][] costs_matrix= { {0,		6401,	10879,	7677,	15993,	1	 },
+										  {6401,	0,		8945,	9890,	16090,	6401 },
+										  {10879,	8945,	0,		18494,	7790,	10879},
+										  {7677,	9890,	18494,	0,		13629,	7677 },
+										  {15993,	16090,	7790,	13629,	0,		15993},
+										  {1,		6401,	10879,	7677,	15993,	0	 } };
 	
 	public static void main(String[] args) {
 		if (args.length > 0) {
