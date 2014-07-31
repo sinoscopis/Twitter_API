@@ -169,17 +169,14 @@ public class FilesDAO {
         }
 	}
     
-    
-    
-
-	public int[] cost(String fileName, int cache, String cache_type) throws SQLException, IOException {
+	public int[] cost(String fileName, String cache_type) throws SQLException, IOException {
 		ResultSet rs = null;
     	int[] caches = null;
         try {
         	if (cache_type=="LRU"){
         		connection = TwitterConnection.getConnection();
      	        statement = connection.createStatement();
-     	        String check = "SELECT * FROM Twitter.filesDistributionLRU WHERE fileName ='"+ fileName+"';";
+     	        String check = "SELECT * FROM Twitter.filesDistributionLRU WHERE fileName ='"+ fileName+"' AND (`cache_1`=TRUE OR `cache_2`=TRUE OR `cache_3`=TRUE OR `cache_4`=TRUE OR `cache_5`=TRUE);";     	        
                	rs = statement.executeQuery(check);
                	boolean val = rs.next();
                	if (val == false){
@@ -213,7 +210,7 @@ public class FilesDAO {
 			else if (cache_type=="eCOUSIN"){
 				connection = TwitterConnection.getConnection();
      	        statement = connection.createStatement();
-     	        String check = "SELECT * FROM Twitter.filesDistributionECO WHERE fileName ='"+ fileName+"';";
+     	        String check = "SELECT * FROM Twitter.filesDistributionECO WHERE fileName ='"+ fileName+"' AND (`cache_1`=TRUE OR `cache_2`=TRUE OR `cache_3`=TRUE OR `cache_4`=TRUE OR `cache_5`=TRUE);";
                	rs = statement.executeQuery(check);
                	boolean val = rs.next();
                	if (val == false){
@@ -227,21 +224,21 @@ public class FilesDAO {
                     else
                     	caches[0]= 0;
                     if (rs.getBoolean("cache_2"))
-                    	caches[0]= 1;
+                    	caches[1]= 1;
                     else
-                    	caches[0]= 0;
+                    	caches[1]= 0;
                     if (rs.getBoolean("cache_3"))
-                    	caches[0]= 1;
+                    	caches[2]= 1;
                     else
-                    	caches[0]= 0;
+                    	caches[2]= 0;
                     if (rs.getBoolean("cache_4"))
-                    	caches[0]= 1;
+                    	caches[3]= 1;
                     else
-                    	caches[0]= 0;
+                    	caches[3]= 0;
                     if (rs.getBoolean("cache_5"))
-                    	caches[0]= 1;
+                    	caches[4]= 1;
                     else
-                    	caches[0]= 0;
+                    	caches[4]= 0;
                 }
 			}
 			

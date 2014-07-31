@@ -31,12 +31,12 @@ public class Server extends Thread
 	 * 		SERVER	0		1		2		3		4		0
 	 * 
 	 * */
-	public static int[][] costs_matrix= { {0,1,2,3,4,0},
-										  {1,0,2,3,4,1},
-										  {2,2,0,3,3,2},
-										  {3,3,3,0,4,3},
-										  {4,4,3,4,0,4},
-										  {0,1,2,3,4,0} };
+	public static int[][] costs_matrix= { {0,2,3,4,5,1},
+										  {2,0,3,4,5,2},
+										  {3,3,0,4,4,3},
+										  {4,4,4,0,5,4},
+										  {5,5,4,5,0,5},
+										  {1,2,3,4,5,0} };
 	
 	public static void main(String[] args) {
 		if (args.length > 0) {

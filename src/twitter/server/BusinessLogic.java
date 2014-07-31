@@ -133,7 +133,7 @@ public class BusinessLogic {
 		int[] caches = null;
 		FilesDAO filesDao = new FilesDAO();
        	try {
-	   		caches = filesDao.cost(file, cache_num,cache_type);
+	   		caches = filesDao.cost(file,cache_type);
 	   		filesDao.updateDeletedFile(first, cache_num, cache_type);
 	   		if (caches.length == 1){
 	   			reply=Server.costs_matrix[5][cache_num-1];
@@ -162,7 +162,7 @@ public class BusinessLogic {
 		int[] caches = null;
 		FilesDAO filesDao = new FilesDAO();
        	try {
-	   		caches = filesDao.cost(file, cache_num,cache_type);
+	   		caches = filesDao.cost(file,cache_type);
 	   		if (caches.length == 1){
 	   			reply=Server.costs_matrix[5][cache_num-1];
 	   		}
