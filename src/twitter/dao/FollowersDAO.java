@@ -17,34 +17,6 @@ public class FollowersDAO {
 	    private Statement statement;
 	 
 	    public FollowersDAO() { }
-	 
-	    /*public List<Follower> getUsers() throws SQLException {
-	        String query = "SELECT * FROM followers";
-	        List<Follower> list = new ArrayList<Follower>();
-	        Follower follower = null;
-	        ResultSet rs = null;
-	        try {
-	            connection = TwitterConnection.getConnection();
-	            statement = connection.createStatement();
-	            rs = statement.executeQuery(query);
-	            while (rs.next()) {
-	            	follower = new Follower();
-	                Retrieve one user details
-	                and store it in user object
-	            	follower.setUserId(rs.getInt("id_user"));
-	            	follower.setCacheNum(rs.getInt("cache"));
-	            	follower.setFollowersNum((rs.getInt("followers")));
-	 
-	                //add each user to the list
-	                list.add(follower);
-	            }
-	        } finally {
-	            DbUtil.close(rs);
-	            DbUtil.close(statement);
-	            DbUtil.close(connection);
-	        }
-	        return list;
-	    }*/
 
 		public List<Follower> followersbycache(int user) throws SQLException {
 			String query = "SELECT * FROM followersByCluster WHERE user_id="+user;

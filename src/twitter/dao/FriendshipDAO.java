@@ -64,6 +64,7 @@ public class FriendshipDAO {
         } catch (SQLException e){
         }
         finally {
+        	DbUtil.close(rs);
             DbUtil.close(statement);
             DbUtil.close(connection);
         }

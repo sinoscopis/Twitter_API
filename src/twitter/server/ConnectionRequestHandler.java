@@ -33,7 +33,7 @@ public class ConnectionRequestHandler implements Runnable{
 					if(outputLine != null) {
 						_out.println(outputLine);
 						if (outputLine.equals("exit")) {
-							System.out.println("Server is closing socket for client:" + _socket.getLocalSocketAddress());
+							System.out.println("Server is closing socket for client:" + _socket.toString());
 							break;
 						}
 					} else {

@@ -41,42 +41,9 @@ public class BusinessLogic {
 			if(clientRequest != null && clientRequest.equalsIgnoreCase("show,users")) {
 				reply = getUsersServer();
 			}
-			else if(clientRequest != null && clientRequest.startsWith("conectado_almacenado,")) {
-				peticion = clientRequest.split(",", 2);
-				reply = friendsincaches(Integer.parseInt(peticion[1]));
-			}
-			else if(clientRequest != null && clientRequest.equalsIgnoreCase("countusers")) {
-				reply = Integer.toString(getUsersCountServer());
-			}
-			else if(clientRequest != null && clientRequest.startsWith("conectUser,")) {
-				peticion = clientRequest.split(",", 2);
-				reply = ConectUser(Integer.parseInt(peticion[1]));
-			}
-			else if(clientRequest != null && clientRequest.startsWith("showid,")) {
-				peticion = clientRequest.split(",", 2);
-				reply = getUsrTweetsServer(Integer.parseInt(peticion[1]));
-			}
-			else if(clientRequest != null && clientRequest.startsWith("Consumo,")) {
-				peticion = clientRequest.split(",", 2);
-				reply = consumirTweet(Integer.parseInt(peticion[1]));
-			}
-			else if(clientRequest != null && clientRequest.equalsIgnoreCase("show,tweets")) {
-				reply = getTweetsServer();
-			}
-			else if(clientRequest != null && clientRequest.equalsIgnoreCase("show,friends")) {
-				reply = getFriendshipsServer();
-			}
 			else if(clientRequest != null && clientRequest.startsWith("insertuser,")) {
 				peticion = clientRequest.split(",", 3);
 				reply = addUserServer(peticion[1],Integer.parseInt(peticion[2]));
-			}
-			else if(clientRequest != null && clientRequest.startsWith("fileInLRUCache,")) {
-				peticion = clientRequest.split(",", 3);
-				reply = registrarFile(peticion[1],Integer.parseInt(peticion[2]),"LRU");
-			}
-			else if(clientRequest != null && clientRequest.startsWith("fileInECOCache,")) {
-				peticion = clientRequest.split(",", 3);
-				reply = registrarFile(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN");
 			}
 			else if(clientRequest != null && clientRequest.startsWith("insertfriendship,")) {
 				peticion = clientRequest.split(",", 3);
@@ -85,6 +52,17 @@ public class BusinessLogic {
 				else
 					reply = "NO puedes hacerte amigo de ti mismo";
 			}
+			else if(clientRequest != null && clientRequest.equalsIgnoreCase("countusers")) {
+				reply = Integer.toString(getUsersCountServer());
+			}
+			else if(clientRequest != null && clientRequest.startsWith("conectUser,")) {
+				peticion = clientRequest.split(",", 2);
+				reply = ConectUser(Integer.parseInt(peticion[1]));
+			}
+			else if(clientRequest != null && clientRequest.startsWith("conectado_almacenado,")) {
+				peticion = clientRequest.split(",", 2);
+				reply = friendsincaches(Integer.parseInt(peticion[1]));
+			}
 			else if(clientRequest != null && clientRequest.startsWith("inserttweet,")) {
 				peticion = clientRequest.split(",", 3);
 				reply = addTweetServer(Integer.parseInt(peticion[1]),peticion[2]);
@@ -92,6 +70,26 @@ public class BusinessLogic {
 			else if(clientRequest != null && clientRequest.startsWith("insertrandomtweet,")) {
 				peticion = clientRequest.split(",", 2);
 				reply = addRandomTweetServer(Integer.parseInt(peticion[1]));
+			}
+			else if(clientRequest != null && clientRequest.startsWith("friendstweets,")) {
+				peticion = clientRequest.split(",", 2);
+				reply = getTweetsServer(Integer.parseInt(peticion[1]));
+			}
+			else if(clientRequest != null && clientRequest.startsWith("retweet,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = addReTweetServer(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
+			}
+			else if(clientRequest != null && clientRequest.startsWith("Consumo,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = consumirTweet(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
+			}
+			else if(clientRequest != null && clientRequest.startsWith("fileInLRUCache,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = registrarFile(peticion[1],Integer.parseInt(peticion[2]),"LRU");
+			}
+			else if(clientRequest != null && clientRequest.startsWith("fileInECOCache,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = registrarFile(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN");
 			}
 			else if(clientRequest != null && clientRequest.startsWith("costeLRU,")) {
 				peticion = clientRequest.split(",", 3);
@@ -109,19 +107,12 @@ public class BusinessLogic {
 				peticion = clientRequest.split(",", 4);
 				reply = calcularcostewithUPD(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN",peticion[3]);
 			}
-			else if(clientRequest != null && clientRequest.startsWith("retweet,")) {
-				peticion = clientRequest.split(",", 3);
-				reply = addReTweetServer(Integer.parseInt(peticion[1]),Integer.parseInt(peticion[2]));
-			}
-			else if(clientRequest != null && clientRequest.startsWith("friendstweets,")) {
-				peticion = clientRequest.split(",", 2);
-				reply = getTweetsServer(Integer.parseInt(peticion[1]));
-			}
 			else {
 				reply = "......";
 			}
 		} catch(Exception e) {
-			System.out.println("input process falied: " + e.getMessage());
+			System.out.println("input process failed: " + e.getMessage());
+			e.printStackTrace();
 			return "exit";
 		}
 
@@ -195,7 +186,6 @@ public class BusinessLogic {
 		return "exit";
 	}
 	
-
 	private String ConectUser(int cache) throws IOException {
 		UserDAO userDao = new UserDAO();   
 		String reply = "";
@@ -223,11 +213,11 @@ public class BusinessLogic {
         return reply;
 	}
 
-	private String consumirTweet(int id_tweet) {
+	private String consumirTweet(int id_tweet, int user_id) {
 		TweetDAO tweetDao = new TweetDAO(); 
         String reply = "";
         try {
-        	reply = tweetDao.seeTweet(id_tweet);
+        	reply = tweetDao.seeTweet(id_tweet, user_id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -248,10 +238,10 @@ public class BusinessLogic {
 	private String addRandomTweetServer(int user) throws IOException {
 		TweetDAO tweetDao = new TweetDAO();
 		double randNumber = Math.random();
-		double d1 = randNumber * 10;
-		int prob = (int)d1+1;
+		double d1 = randNumber * 100;
+		int prob = (int)d1;
 		String tweet;
-		if (prob == 1)
+		if (prob>=1 && prob <25)
 			tweet=randomFile();
 		else
 			tweet=randomIdentifier(140);
@@ -383,7 +373,7 @@ public class BusinessLogic {
         return res;
     }
 	
-	static String getTweetsServer(int user_id) {
+	static String getTweetsServer(int user_id) throws InterruptedException {
         TweetDAO tweetDao = new TweetDAO();
         List<Tweet> tweets;
         String res = "";

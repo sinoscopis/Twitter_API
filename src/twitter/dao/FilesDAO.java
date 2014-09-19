@@ -18,15 +18,13 @@ public class FilesDAO {
     	ResultSet rs = null;
     	String query = null;
         try {
+        	connection = TwitterConnection.getConnection();
+ 	        statement = connection.createStatement();
         	if (cache_type=="LRU"){
-        		 connection = TwitterConnection.getConnection();
-     	        statement = connection.createStatement();
      	        String check = "SELECT filesDistributionLRU.file_id FROM Twitter.filesDistributionLRU WHERE fileName ='"+ fileName+"';";
                	rs = statement.executeQuery(check);
                	boolean val = rs.next();
                	if (val == false){
-               		connection = TwitterConnection.getConnection();
-			        statement = connection.createStatement();
 			        if (cache == 1){
 			        	query = "INSERT INTO Twitter.filesDistributionLRU (fileName, cache_1) VALUES ('"+ fileName +"', TRUE);";
 			        }
@@ -45,8 +43,6 @@ public class FilesDAO {
 					statement.executeUpdate(query);
                	}
                 else{
-                	connection = TwitterConnection.getConnection();
-    		        statement = connection.createStatement();
     		        if (cache == 1){
     		        	query = "UPDATE Twitter.filesDistributionLRU SET cache_1=TRUE WHERE fileName='"+ fileName +"';";
     		        }
@@ -66,14 +62,10 @@ public class FilesDAO {
                 }
 	        }
 			else if (cache_type=="eCOUSIN"){
-				connection = TwitterConnection.getConnection();
-     	        statement = connection.createStatement();
      	        String check = "SELECT filesDistributionECO.file_id FROM Twitter.filesDistributionECO WHERE fileName ='"+ fileName+"';";
                	rs = statement.executeQuery(check);
                	boolean val = rs.next();
                	if (val == false){
-               		connection = TwitterConnection.getConnection();
-			        statement = connection.createStatement();
 			        if (cache == 1){
 			        	query = "INSERT INTO Twitter.filesDistributionECO (fileName, cache_1) VALUES ('"+ fileName +"', TRUE);";
 			        }
@@ -92,8 +84,6 @@ public class FilesDAO {
 					statement.executeUpdate(query);
                	}
                 else{
-                	connection = TwitterConnection.getConnection();
-    		        statement = connection.createStatement();
     		        if (cache == 1){
     		        	query = "UPDATE Twitter.filesDistributionECO SET cache_1=TRUE WHERE fileName='"+ fileName +"';";
     		        }
@@ -114,6 +104,7 @@ public class FilesDAO {
 			}
 			
         } finally {
+        	DbUtil.close(rs);
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
@@ -122,9 +113,9 @@ public class FilesDAO {
     public void updateDeletedFile(String fileName,int cache, String cache_type) throws SQLException, IOException {
     	String query = null;
         try {
+        	connection = TwitterConnection.getConnection();
+	        statement = connection.createStatement();
         	if (cache_type=="LRU"){
-        		connection = TwitterConnection.getConnection();
-		        statement = connection.createStatement();
 		        if (cache == 1){
 		        	query = "UPDATE Twitter.filesDistributionLRU SET cache_1=FALSE WHERE fileName='"+ fileName +"';";
 		        }
@@ -143,8 +134,6 @@ public class FilesDAO {
 				statement.executeUpdate(query); 
 	        }
 			else if (cache_type=="eCOUSIN"){
-				connection = TwitterConnection.getConnection();
-		        statement = connection.createStatement();
 		        if (cache == 1){
 		        	query = "UPDATE Twitter.filesDistributionECO SET cache_1=FALSE WHERE fileName='"+ fileName +"';";
 		        }
@@ -171,11 +160,12 @@ public class FilesDAO {
     
 	public int[] cost(String fileName, String cache_type) throws SQLException, IOException {
 		ResultSet rs = null;
+		ResultSet rs2 = null;
     	int[] caches = null;
         try {
+        	connection = TwitterConnection.getConnection();
+ 	        statement = connection.createStatement();
         	if (cache_type=="LRU"){
-        		connection = TwitterConnection.getConnection();
-     	        statement = connection.createStatement();
      	        String check = "SELECT * FROM Twitter.filesDistributionLRU WHERE fileName ='"+ fileName+"' AND (`cache_1`=TRUE OR `cache_2`=TRUE OR `cache_3`=TRUE OR `cache_4`=TRUE OR `cache_5`=TRUE);";     	        
                	rs = statement.executeQuery(check);
                	boolean val = rs.next();
@@ -208,34 +198,32 @@ public class FilesDAO {
                 }
 	        }
 			else if (cache_type=="eCOUSIN"){
-				connection = TwitterConnection.getConnection();
-     	        statement = connection.createStatement();
      	        String check = "SELECT * FROM Twitter.filesDistributionECO WHERE fileName ='"+ fileName+"' AND (`cache_1`=TRUE OR `cache_2`=TRUE OR `cache_3`=TRUE OR `cache_4`=TRUE OR `cache_5`=TRUE);";
-               	rs = statement.executeQuery(check);
-               	boolean val = rs.next();
+               	rs2 = statement.executeQuery(check);
+               	boolean val = rs2.next();
                	if (val == false){
                		caches = new int[1];
                		caches[0]=0;
                	}
                 else{
                 	caches = new int[5];
-                    if (rs.getBoolean("cache_1"))
+                    if (rs2.getBoolean("cache_1"))
                     	caches[0]= 1;
                     else
                     	caches[0]= 0;
-                    if (rs.getBoolean("cache_2"))
+                    if (rs2.getBoolean("cache_2"))
                     	caches[1]= 1;
                     else
                     	caches[1]= 0;
-                    if (rs.getBoolean("cache_3"))
+                    if (rs2.getBoolean("cache_3"))
                     	caches[2]= 1;
                     else
                     	caches[2]= 0;
-                    if (rs.getBoolean("cache_4"))
+                    if (rs2.getBoolean("cache_4"))
                     	caches[3]= 1;
                     else
                     	caches[3]= 0;
-                    if (rs.getBoolean("cache_5"))
+                    if (rs2.getBoolean("cache_5"))
                     	caches[4]= 1;
                     else
                     	caches[4]= 0;
@@ -243,6 +231,8 @@ public class FilesDAO {
 			}
 			
         } finally {
+        	DbUtil.close(rs);
+        	DbUtil.close(rs2);
             DbUtil.close(statement);
             DbUtil.close(connection);
         }

@@ -67,7 +67,6 @@ public class Server extends Thread
 		
 		try {
 			while(true){
-				
 				_socket=serverSocket.accept();
 				Runnable connectionRequesthandler = new ConnectionRequestHandler(_socket);
 				new Thread(connectionRequesthandler).start();

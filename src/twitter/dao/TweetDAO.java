@@ -8,10 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import twitter.db.DbUtil;
 import twitter.db.TwitterConnection;
 import twitter.to.Tweet;
+import twitter.to.User;
  
 public class TweetDAO {
     private Connection connection;
@@ -75,35 +77,48 @@ public class TweetDAO {
           	}
         } finally {
             DbUtil.close(rs);
+            DbUtil.close(rs1);
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
         return list;
     }
     
-    public List<Tweet> getFriendsTweets(int userid) throws SQLException {
+    public List<Tweet> getFriendsTweets(int userid) throws SQLException, InterruptedException {
         List<Tweet> list = new ArrayList<Tweet>();
         Tweet tweet = null;
         ResultSet rs = null;
+        ResultSet rs2 = null;
+        int amigos = 0;
         try {
             connection = TwitterConnection.getConnection();
             statement = connection.createStatement();
-            String query = "SELECT * FROM tweets WHERE id_user_sen IN (SELECT id_user_acc FROM friendship WHERE id_user_req = "+userid+")";
-            rs = statement.executeQuery(query);
+            String querystop = "SELECT sum(friends) as amigos FROM `followersByCluster` WHERE `user_id`="+userid+";";
+            rs = statement.executeQuery(querystop);
+            
             while (rs.next()) {
+                amigos = rs.getInt("amigos");
+            }
+            if (amigos < 30)
+            	TimeUnit.MILLISECONDS.sleep(30000);
+            //Selecciona todos los tweets de los amigos y sean "nuevos" (no consumidos antes)
+            String query = "SELECT * FROM tweets WHERE id_user_sen IN (SELECT id_user_req FROM friendship WHERE id_user_acc = "+userid+") AND id_tweet > (select last_tweet from users where id_user = "+userid+")"; // ORDER BY date desc LIMIT 500";
+            rs2 = statement.executeQuery(query);
+            while (rs2.next()) {
                 tweet = new Tweet();
                 /*Retrieve one tweet details
                 and store it in tweet object*/
-                tweet.setTweetId(rs.getInt("id_tweet"));
-                tweet.setTweetSenderId(rs.getInt("id_user_sen"));
-                tweet.setTweetText(rs.getString("tweet"));
-                tweet.setDot(rs.getDate("date"));
+                tweet.setTweetId(rs2.getInt("id_tweet"));
+                tweet.setTweetSenderId(rs2.getInt("id_user_sen"));
+                tweet.setTweetText(rs2.getString("tweet"));
+                tweet.setDot(rs2.getDate("date"));
                 //add each tweet to the list
                 list.add(tweet);
             }
           	
         } finally {
             DbUtil.close(rs);
+            DbUtil.close(rs2);
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
@@ -137,6 +152,7 @@ public class TweetDAO {
            	}
         } finally {
         	scn.close();
+        	DbUtil.close(rs);
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
@@ -162,6 +178,7 @@ public class TweetDAO {
                 	return "Imposible insertar, el tweet es mayor de 140 caracteres";
            	}
         } finally {
+        	DbUtil.close(rs);
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
@@ -184,15 +201,21 @@ public class TweetDAO {
             	return "ReTweet - (" + tweet + ") - From - [" + userid + "] ";
            	}
         } finally {
+        	DbUtil.close(rs);
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
 	}
 	
-	public String seeTweet(int id_tweet) throws SQLException {
+	public String seeTweet(int id_tweet, int user_id_pide) throws SQLException {
 		String query = "SELECT * FROM tweets WHERE id_tweet = "+id_tweet;
         Tweet tweet = null;
         ResultSet rs = null;
+        ResultSet rs2 = null;
+        ResultSet rs3 = null;
+        int cache=0;
+        int user_creador=0;
+        int num_follow_cache=0;
         try {
             connection = TwitterConnection.getConnection();
             statement = connection.createStatement();
@@ -207,12 +230,31 @@ public class TweetDAO {
                 tweet.setDot(rs.getDate("date"));
                 //add each tweet to the list
             }
+            user_creador=tweet.getTweetSenderId();
+            String a = tweet.getTweetText();
+            if(a.startsWith("http")){
+            	String query1 = "UPDATE users SET last_tweet="+tweet.getTweetId()+" WHERE id_user="+user_id_pide;
+		        statement.executeUpdate(query1);
+            }
+            String query1 = "SELECT cache FROM  users WHERE id_user = "+user_id_pide+";";
+	        rs2=statement.executeQuery(query1);
+	        while (rs2.next()) {
+	        	cache=rs2.getInt("cache");
+	        }
+	        
+            String query2 = "SELECT count(*) as num_follow_cache FROM  users WHERE cache="+cache+" and id_user in (select id_user_acc from friendship where id_user_req = "+user_creador+");";
+	        rs3 = statement.executeQuery(query2);
+	        while (rs3.next()) {
+	        	num_follow_cache=rs3.getInt("num_follow_cache");
+	        }
         } finally {
             DbUtil.close(rs);
+            DbUtil.close(rs2);
+            DbUtil.close(rs3);
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
-        return tweet.toString();
+        return tweet.toString()+"("+num_follow_cache+")";
 	}
 	
 }
