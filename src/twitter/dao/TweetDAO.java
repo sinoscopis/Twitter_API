@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import twitter.db.DbUtil;
 import twitter.db.TwitterConnection;
 import twitter.to.Tweet;
-import twitter.to.User;
  
 public class TweetDAO {
     private Connection connection;

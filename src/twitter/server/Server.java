@@ -12,7 +12,7 @@ import twitter.db.TwitterConnection;
 public class Server extends Thread
 {
 	final static int _portNumber = 55555; //Arbitrary port number
-	final static int _transferPort = 55055;
+	final static int _transferPort = 44444;
 	private Socket _socket = null;
 	private Socket _transfersocket = null;
 	private PrintWriter _out = null;
