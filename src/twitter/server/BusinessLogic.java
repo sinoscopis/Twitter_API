@@ -1,12 +1,25 @@
+/*
+ * Interpreta los mensajes del cliente y realiza las acciones pertinentes para enviarles respuesta
+ */
+
 package twitter.server;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.Socket;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
+
+
+import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
+
+import twitter.dao.CacheDAO;
 import twitter.dao.FilesDAO;
 import twitter.dao.FollowersDAO;
 import twitter.dao.FriendshipDAO;
@@ -16,6 +29,7 @@ import twitter.to.Follower;
 import twitter.to.Friendship;
 import twitter.to.Tweet;
 import twitter.to.User;
+import twitter.to.Cache;
 
 /**
  * Handles business logic of application.
@@ -91,6 +105,14 @@ public class BusinessLogic {
 				peticion = clientRequest.split(",", 3);
 				reply = registrarFile(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN");
 			}
+			else if(clientRequest != null && clientRequest.startsWith("fileInPushLRUCache,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = registrarFile(peticion[1],Integer.parseInt(peticion[2]),"LRU_PUSH");
+			}
+			else if(clientRequest != null && clientRequest.startsWith("fileInPushECOCache,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = registrarFile(peticion[1],Integer.parseInt(peticion[2]),"eCO_PUSH");
+			}
 			else if(clientRequest != null && clientRequest.startsWith("costeLRU,")) {
 				peticion = clientRequest.split(",", 3);
 				reply = calcularcoste(peticion[1],Integer.parseInt(peticion[2]),"LRU");
@@ -107,6 +129,10 @@ public class BusinessLogic {
 				peticion = clientRequest.split(",", 4);
 				reply = calcularcostewithUPD(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN",peticion[3]);
 			}
+			else if(clientRequest != null && clientRequest.startsWith("New_Cache,")) {
+				peticion = clientRequest.split(",", 4);
+				reply = registrarCache(Integer.parseInt(peticion[1]),peticion[2],Integer.parseInt(peticion[3]));
+			}
 			else {
 				reply = "......";
 			}
@@ -117,6 +143,16 @@ public class BusinessLogic {
 		}
 
 		return reply;
+	}
+
+	private String registrarCache(int cache_num, String cache_ip, int users) {
+		CacheDAO cacheDao = new CacheDAO();
+       	try {
+       		cacheDao.insertCache(cache_num, "127.0.0.1", users);
+       	} catch (SQLException e) {
+       		e.printStackTrace();
+       	}
+		return "exit";
 	}
 
 	private String calcularcostewithUPD(String file, int cache_num, String cache_type, String first) throws IOException {
@@ -213,7 +249,7 @@ public class BusinessLogic {
         return reply;
 	}
 
-	private String consumirTweet(int id_tweet, int user_id) {
+	private static String consumirTweet(int id_tweet, int user_id) {
 		TweetDAO tweetDao = new TweetDAO(); 
         String reply = "";
         try {
@@ -224,7 +260,7 @@ public class BusinessLogic {
         return "Consumir -"+reply;
 	}
 
-	private String addReTweetServer(int user, int id_tweet) throws IOException {
+	private static String addReTweetServer(int user, int id_tweet) throws IOException {
 		TweetDAO tweetDao = new TweetDAO(); 
            String reply = "";
            try {
@@ -241,8 +277,10 @@ public class BusinessLogic {
 		double d1 = randNumber * 100;
 		int prob = (int)d1;
 		String tweet;
-		if (prob>=1 && prob <25)
+		if (prob>=1 && prob <25){
 			tweet=randomFile();
+			push(tweet, user);
+		}
 		else
 			tweet=randomIdentifier(140);
        	String reply = "";
@@ -251,9 +289,67 @@ public class BusinessLogic {
        	} catch (SQLException e) {
        		e.printStackTrace();
        	}
+
        	return reply;
 	}
 	
+	private void push(String tweet, int user) throws IOException {
+		CacheDAO cacheDao = new CacheDAO();
+       	FollowersDAO followersDao = new FollowersDAO();
+       	List<Follower> followers;
+       	List<Cache> caches;
+        try {
+        	followers = followersDao.followersbycache(user);
+            caches = cacheDao.getCaches();          		
+            for (Cache cache : caches) {
+            	for (Follower follower: followers){
+            		int umbral_cache = (int) (cache.getCacheUsers() * Server.umbral_push)/100;
+        			if (follower.getFollowersNum() > umbral_cache)
+        				Enviar(tweet, cache, true);
+        			else
+        				Enviar(tweet, cache, false);
+        		}
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+	}
+
+	private void Enviar(String tweet, Cache cache, boolean push) throws IOException {
+		Socket socket = new Socket(cache.getCacheIp(), 60000);
+		 
+		//PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+		//BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		
+		DataInputStream in = new DataInputStream(socket.getInputStream());
+		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+
+		String fromServer;
+		String fromCache = null;
+		
+		while ((fromCache = in.readUTF()) != null) {
+			if (fromCache.equals("exit"))
+				break;
+			else {
+				if (push)
+					fromServer = "Push," + tweet +",true";
+				else
+					fromServer = "Push," + tweet +",false";;
+				if (fromServer != null) {
+					//System.out.println("Client - " + fromUser);
+					synchronized (socket){
+						out.writeUTF(fromServer);
+					}
+				}
+			}
+		}
+		
+		out.close();
+		in.close();
+		socket.close();
+		
+	}
+
 	public static String randomFile() {
 		 String sSistemaOperativo = System.getProperty("os.name");
 		 String file_path = null;
@@ -373,19 +469,72 @@ public class BusinessLogic {
         return res;
     }
 	
-	static String getTweetsServer(int user_id) throws InterruptedException {
+	static String getTweetsServer(int user_id) throws InterruptedException, IOException {
         TweetDAO tweetDao = new TweetDAO();
         List<Tweet> tweets;
         String res = "";
+        String reply = "continua";
         try {
             tweets = tweetDao.getFriendsTweets(user_id);	
             for (Tweet tweet : tweets) {
             	res = res + tweet;
             }
+            
+            Hashtable twts=new Hashtable();
+            StringTokenizer tokens=new StringTokenizer(res, "(|)");
+            int i=0;
+            //Guardo la lista de tweets de todos mis amigos
+            while(tokens.hasMoreTokens()){
+                String a = tokens.nextToken();
+                try  
+                  {  
+                     if(Integer.parseInt(a)>0){
+                    	 i++;
+                    	 twts.put(i, Integer.parseInt(a));
+                     }
+                  }  
+                  catch(NumberFormatException nfe)  
+                  {  
+                  }
+            }
+            if (i>0) {
+	            //Select random twit
+				double rt = Math.random();
+				double drt = rt * i;
+				int rand_tweet = (int)drt +1;
+				
+				//Anado probabilidad de consumir el twit 50 50
+				double randNumber = Math.random();
+				double d1 = randNumber * 100;
+				int range = (int)d1;
+				if (range>=1 && range <50){
+					//CONSUME el Twit
+					int id_tweet=(int) twts.get(rand_tweet);
+					reply = consumirTweet(id_tweet,user_id);
+				}
+				else {
+					//No consume el twit
+					//anado probabilidad para que lo retweetee
+					double randNumber4 = Math.random();
+					double d4 = randNumber4 * 100;
+					int range4 = (int)d4;
+					if (range4>=1 && range4 <20){
+						//retweet
+						int id_tweet=(int) twts.get(rand_tweet);
+						reply = addReTweetServer(user_id,id_tweet);
+						/*posted=posted+1;
+						System.out.println("user - " + client_id + "  posted: "+ posted );*/
+					}
+					else {
+						// no retweet
+						reply = "continua";
+					}
+				}
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return res;
+		return reply;
     }
 	
 	static String addUserServer(String new_user,int cache) throws IOException {
@@ -414,4 +563,5 @@ public class BusinessLogic {
            }
            return reply;
     }
+    
 }

@@ -1,3 +1,7 @@
+/*
+ * Clase para la gestion de los amigos
+ */
+
 package twitter.to;
 
 public class Follower {

@@ -1,3 +1,7 @@
+/*
+ * Clase para la gestion de la conexion de la base de datos
+ */
+
 package twitter.db;
 
 import java.sql.Connection;

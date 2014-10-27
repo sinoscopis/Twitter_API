@@ -1,3 +1,7 @@
+/*
+ * Realiza las llamadas a la base de datos relacionadas con la gestion de tweets
+ */
+
 package twitter.dao;
 
 import java.io.IOException;

@@ -1,3 +1,7 @@
+/*
+ * Clase para la gestion de las relaciones entre usuarios
+ */
+
 package twitter.to;
 
 import java.util.Date;

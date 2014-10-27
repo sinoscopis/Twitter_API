@@ -1,3 +1,7 @@
+/*
+ * Clase para la gestion de los archivos
+ */
+
 package twitter.to;
 
 public class File {

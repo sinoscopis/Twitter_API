@@ -1,3 +1,7 @@
+/*
+ * Clase para la gestion de los tweets
+ */
+
 package twitter.to;
 
 import java.util.Date;

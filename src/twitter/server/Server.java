@@ -1,3 +1,7 @@
+/*
+ * Arranca el servidor y abre el socket a la espera de conexiones
+ */
+
 package twitter.server;
 
 import java.net.*;
@@ -13,6 +17,7 @@ public class Server extends Thread
 {
 	final static int _portNumber = 55555; //Arbitrary port number
 	final static int _transferPort = 44444;
+	public static int umbral_push;
 	private Socket _socket = null;
 	private Socket _transfersocket = null;
 	private PrintWriter _out = null;
@@ -45,12 +50,14 @@ public class Server extends Thread
 		        TwitterConnection.URL =Twitter_url;
 		        TwitterConnection.USER = args[1];
 		        TwitterConnection.PASSWORD = args[2];
+		        Server.umbral_push = Integer.parseInt(args[3]);
+		        
 		    } catch (Exception e) {
-		        System.err.println("Server.jar Twiter_IP User Password");
+		        System.err.println("Server.jar Twiter_IP User Password Push_threshold");
 		    }
 		}
 		else{
-			System.err.println("Server.jar Twiter_IP User Password");
+			System.err.println("Server.jar Twiter_IP User Password Push_threshold");
 			System.exit(1);
 		}
 		new Server().run();

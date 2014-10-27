@@ -1,3 +1,7 @@
+/*
+ * Clase para la gestion de los usuarios
+ */
+
 package twitter.to;
 
 public class User {

@@ -1,3 +1,7 @@
+/*
+ * Gestiona la conexion y comienza el intercambio de mensajes
+ */
+
 package twitter.server;
 
 import java.io.BufferedReader;

@@ -1,3 +1,7 @@
+/*
+ * Conexion con la base de datos
+ */
+
 package twitter.db;
 
 import java.sql.Connection;

@@ -1,3 +1,7 @@
+/*
+ * Realiza las llamadas a la base de datos relacionadas con la gestion de amigos
+ */
+
 package twitter.dao;
 
 import java.sql.Connection;
