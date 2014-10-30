@@ -148,7 +148,7 @@ public class BusinessLogic {
 	private String registrarCache(int cache_num, String cache_ip, int users) {
 		CacheDAO cacheDao = new CacheDAO();
        	try {
-       		cacheDao.insertCache(cache_num, "127.0.0.1", users);
+       		cacheDao.insertCache(cache_num, cache_ip, users);
        	} catch (SQLException e) {
        		e.printStackTrace();
        	}
