@@ -326,28 +326,30 @@ public class BusinessLogic {
 
 		String fromServer;
 		String fromCache = null;
-		
-		while ((fromCache = in.readUTF()) != null) {
-			if (fromCache.equals("exit"))
-				break;
-			else {
-				if (push)
-					fromServer = "Push," + tweet +",true";
-				else
-					fromServer = "Push," + tweet +",false";;
-				if (fromServer != null) {
-					//System.out.println("Client - " + fromUser);
-					synchronized (socket){
-						out.writeUTF(fromServer);
+		try{
+			while ((fromCache = in.readUTF()) != null) {
+				if (fromCache.equals("exit")){
+					out.close();
+					in.close();
+					socket.close();
+					break;
+				}
+				else {
+					if (push)
+						fromServer = "Push," + tweet +",true";
+					else
+						fromServer = "Push," + tweet +",false";;
+					if (fromServer != null) {
+						//System.out.println("Client - " + fromUser);
+						synchronized (socket){
+							out.writeUTF(fromServer);
+						}
 					}
 				}
 			}
-		}
-		
-		out.close();
-		in.close();
-		socket.close();
-		
+		} catch (Exception e) {
+            
+        }
 	}
 
 	public static String randomFile() {
