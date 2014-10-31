@@ -224,7 +224,7 @@ public class FilesDAO {
 		        else if (cache == 5){
 		        	query = "UPDATE Twitter.filesDistributionLRU SET cache_5=FALSE WHERE fileName='"+ fileName +"';";
 		        }
-				statement.executeUpdate(query); 
+				statement.executeUpdate(query);
 	        }
 			else if (cache_type=="eCOUSIN"){
 		        if (cache == 1){
