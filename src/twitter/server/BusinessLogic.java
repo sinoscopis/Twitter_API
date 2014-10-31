@@ -121,6 +121,14 @@ public class BusinessLogic {
 				peticion = clientRequest.split(",", 3);
 				reply = calcularcoste(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN");
 			}
+			else if(clientRequest != null && clientRequest.startsWith("costeLRU_PUSH,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = calcularcoste(peticion[1],Integer.parseInt(peticion[2]),"LRU_PUSH");
+			}
+			else if(clientRequest != null && clientRequest.startsWith("costeECO_PUSH,")) {
+				peticion = clientRequest.split(",", 3);
+				reply = calcularcoste(peticion[1],Integer.parseInt(peticion[2]),"eCO_PUSH");
+			}
 			else if(clientRequest != null && clientRequest.startsWith("costeLRUwithUPD,")) {
 				peticion = clientRequest.split(",", 4);
 				reply = calcularcostewithUPD(peticion[1],Integer.parseInt(peticion[2]),"LRU",peticion[3]);
@@ -128,6 +136,14 @@ public class BusinessLogic {
 			else if(clientRequest != null && clientRequest.startsWith("costeECOwithUPD,")) {
 				peticion = clientRequest.split(",", 4);
 				reply = calcularcostewithUPD(peticion[1],Integer.parseInt(peticion[2]),"eCOUSIN",peticion[3]);
+			}
+			else if(clientRequest != null && clientRequest.startsWith("costeLRU_PUSHwithUPD,")) {
+				peticion = clientRequest.split(",", 4);
+				reply = calcularcostewithUPD(peticion[1],Integer.parseInt(peticion[2]),"LRU_PUSH",peticion[3]);
+			}
+			else if(clientRequest != null && clientRequest.startsWith("costeECO_PUSHwithUPD,")) {
+				peticion = clientRequest.split(",", 4);
+				reply = calcularcostewithUPD(peticion[1],Integer.parseInt(peticion[2]),"eCO_PUSH",peticion[3]);
 			}
 			else if(clientRequest != null && clientRequest.startsWith("New_Cache,")) {
 				peticion = clientRequest.split(",", 4);
