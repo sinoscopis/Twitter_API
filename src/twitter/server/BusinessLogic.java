@@ -303,11 +303,13 @@ public class BusinessLogic {
             caches = cacheDao.getCaches();          		
             for (Cache cache : caches) {
             	for (Follower follower: followers){
-            		int umbral_cache = (int) (cache.getCacheUsers() * Server.umbral_push)/100;
-        			if (follower.getFollowersNum() > umbral_cache)
-        				Enviar(tweet, cache, true);
-        			else
-        				Enviar(tweet, cache, false);
+            		if (follower.getCacheNum() == cache.getCacheNum()){
+	            		int umbral_cache = (int) (cache.getCacheUsers() * Server.umbral_push)/100;
+	        			if (follower.getFollowersNum() > umbral_cache)
+	        				Enviar(tweet, cache, true);
+	        			else
+	        				Enviar(tweet, cache, false);
+            		}
         		}
             }
         } catch (SQLException e) {
